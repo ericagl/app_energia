@@ -1,0 +1,4 @@
+fastapi>=0.110
+uvicorn[standard]>=0.29
+edge-tts>=7.0  # voz do servidor (opcional; precisa de internet)
+libsql-experimental>=0.0.40  # cliente Turso/libSQL (historico duravel)

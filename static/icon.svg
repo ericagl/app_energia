@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-label="Monitor de Energia">
+  <rect width="512" height="512" rx="96" fill="#0b5fa5"/>
+  <circle cx="256" cy="230" r="96" fill="#f0b44b"/>
+  <g stroke="#f0b44b" stroke-width="20" stroke-linecap="round">
+    <line x1="256" y1="70" x2="256" y2="104"/>
+    <line x1="256" y1="356" x2="256" y2="390"/>
+    <line x1="96" y1="230" x2="130" y2="230"/>
+    <line x1="382" y1="230" x2="416" y2="230"/>
+    <line x1="143" y1="117" x2="167" y2="141"/>
+    <line x1="345" y1="319" x2="369" y2="343"/>
+    <line x1="369" y1="117" x2="345" y2="141"/>
+    <line x1="167" y1="319" x2="143" y2="343"/>
+  </g>
+  <path d="M270 176 214 250 252 250 242 320 300 236 260 236 Z" fill="#0b5fa5" stroke="#fff" stroke-width="10" stroke-linejoin="round"/>
+</svg>

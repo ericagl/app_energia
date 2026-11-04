@@ -1,0 +1,8 @@
+# Credenciais e dados locais — nunca publicar
+.env
+firmware/esp32_energia/config.h
+dados/
+*.db
+.venv/
+__pycache__/
+.pytest_cache/

@@ -1,0 +1,28 @@
+# Render Blueprint — Monitor de Energia (Casa Solar)
+# Faz deploy do backend FastAPI. O MESMO serviço já serve o app em "/".
+# Coloque este arquivo na RAIZ do repositório (a pasta monitor_energia).
+services:
+  - type: web
+    name: monitor-energia          # a URL vira https://monitor-energia.onrender.com
+    runtime: python
+    plan: free                     # compute GRÁTIS: hiberna após ~15 min SEM tráfego
+    buildCommand: pip install -r requirements.txt
+    # mkdir garante a pasta dados/ (usada pelo modo demonstração e pelos logs)
+    startCommand: bash -c "mkdir -p dados && uvicorn app.main:app --host 0.0.0.0 --port $PORT"
+    envVars:
+      - key: MODO
+        value: real
+      - key: API_KEY
+        sync: false                # defina no painel do Render (secreta)
+      # --- Turso (histórico durável; sobrevive aos deploys) ---
+      - key: TURSO_DATABASE_URL
+        sync: false                # libsql://SEU-BANCO-....turso.io
+      - key: TURSO_AUTH_TOKEN
+        sync: false                # token gerado no Turso (secreto)
+      # --- demais ---
+      - key: TTS_VOZ
+        value: pt-BR-FranciscaNeural
+      - key: TARIFA_RS_POR_KWH
+        value: "0.95"              # TODO: tarifa real da concessionária
+      - key: PYTHON_VERSION
+        value: "3.12.6"

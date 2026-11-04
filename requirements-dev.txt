@@ -1,0 +1,4 @@
+# Dependencias de desenvolvimento (testes)
+-r requirements.txt
+pytest>=8
+httpx>=0.27

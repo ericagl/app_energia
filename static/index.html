@@ -1,0 +1,457 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="theme-color" content="#0B5FA5" />
+  <title>Casa Solar — Conta de Energia</title>
+  <link rel="manifest" href="manifest.webmanifest" />
+  <link rel="icon" href="icon.svg" type="image/svg+xml" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <a class="skip-link" href="#conteudo">Pular para o conteúdo</a>
+
+  <!-- Ícones reutilizados (referenciados com <use>) -->
+  <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+    <symbol id="i-sol" viewBox="0 0 24 24"><circle cx="12" cy="12" r="4" fill="currentColor"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3M4.9 4.9 7 7M17 17l2.1 2.1M4.9 19.1 7 17M17 7l2.1-2.1" stroke="currentColor" stroke-width="2" stroke-linecap="round" fill="none"/></symbol>
+    <symbol id="i-casa" viewBox="0 0 24 24"><path d="M3 11 12 4l9 7v9H3Z" fill="currentColor"/></symbol>
+    <symbol id="i-rede" viewBox="0 0 24 24"><path d="M13 2 4 14h7l-1 8 9-12h-7Z" fill="currentColor"/></symbol>
+    <symbol id="i-saldo" viewBox="0 0 24 24"><path d="M12 4v16M5 8h14M5 8l-3 7h6ZM19 8l-3 7h6Z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/></symbol>
+    <symbol id="i-som" viewBox="0 0 24 24"><path d="M3 10v4h4l5 4V6L7 10Z" fill="currentColor"/><path d="M16.5 8.5a5 5 0 0 1 0 7M19 6a8.5 8.5 0 0 1 0 12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></symbol>
+    <symbol id="i-conta" viewBox="0 0 24 24"><path d="M6 3h9l4 4v14H6Z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><path d="M9 11h7M9 15h7" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></symbol>
+    <symbol id="i-grafico" viewBox="0 0 24 24"><path d="M4 20V10M10 20V4M16 20v-8M22 20H2" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></symbol>
+    <symbol id="i-fluxo" viewBox="0 0 24 24"><path d="M4 7h11l-3-3M20 17H9l3 3" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+    <symbol id="i-chat" viewBox="0 0 24 24"><path d="M4 5h16v11H9l-5 4Z" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linejoin="round"/><path d="M8 10h8" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></symbol>
+    <symbol id="i-mic" viewBox="0 0 24 24"><rect x="9" y="3" width="6" height="11" rx="3" fill="currentColor"/><path d="M5 11a7 7 0 0 0 14 0M12 18v3M8 21h8" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></symbol>
+    <symbol id="i-ok" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" fill="currentColor"/><path d="m7 12 3.5 3.5L17 9" fill="none" stroke="var(--surface)" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+    <symbol id="i-alerta" viewBox="0 0 24 24"><path d="M12 2 1 21h22Z" fill="currentColor"/><path d="M12 9v5M12 17.5v.5" stroke="var(--surface)" stroke-width="2.4" stroke-linecap="round"/></symbol>
+  </svg>
+
+  <header class="topo">
+    <div class="marca">
+      <svg class="marca-icone" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="#i-sol"/></svg>
+      <h1>Casa Solar <span class="marca-sub">Conta de energia</span></h1>
+    </div>
+    <div class="topo-acoes" role="group" aria-label="Ajustes de leitura">
+      <button id="btn-texto" class="botao-icone" type="button" aria-pressed="false" aria-label="Texto maior">
+        <svg class="icone" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+          <path d="M3 19 8 6l5 13M4.8 15h6.4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          <path d="M17 9v8M13 13h8" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+        </svg>
+        <span class="rotulo-longo">Texto maior</span><span class="rotulo-curto" aria-hidden="true">Texto</span>
+      </button>
+      <button id="btn-tema" class="botao-icone" type="button" aria-pressed="false" aria-label="Alto contraste">
+        <svg class="icone" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+          <circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="2"/>
+          <path d="M12 3a9 9 0 0 1 0 18Z" fill="currentColor"/>
+        </svg>
+        <span class="rotulo-longo">Alto contraste</span><span class="rotulo-curto" aria-hidden="true">Contraste</span>
+      </button>
+      <button id="btn-painel-voz" class="botao-icone" type="button" aria-expanded="false" aria-controls="painel-voz">
+        <svg class="icone" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="#i-som"/></svg>
+        <span>Voz</span>
+      </button>
+    </div>
+  </header>
+
+  <!-- Ajustes da voz (abre pelo botão "Voz" do topo) -->
+  <section id="painel-voz" class="cartao painel-voz" aria-labelledby="tit-painel-voz" hidden>
+    <h2 id="tit-painel-voz">Ajustes da voz</h2>
+    <div class="ajustes-corpo">
+      <fieldset class="velocidade">
+        <legend>Velocidade da fala</legend>
+        <label><input type="radio" name="velocidade" value="0.7" /> Devagar</label>
+        <label><input type="radio" name="velocidade" value="0.9" /> Normal</label>
+        <label><input type="radio" name="velocidade" value="1.15" /> Rápida</label>
+      </fieldset>
+      <label for="sel-voz" class="rotulo-campo">Voz</label>
+      <select id="sel-voz"><option value="">Automática (escolhe a melhor disponível)</option></select>
+      <p class="sub" id="voz-status" role="status"></p>
+      <label class="check">
+        <input type="checkbox" id="chk-falar" />
+        Ler as respostas do assistente em voz alta automaticamente
+        <span class="sub bloco">Desmarque se você usa leitor de tela (TalkBack, VoiceOver, NVDA): as respostas serão enviadas a ele. Os botões "Ouvir" continuam funcionando.</span>
+      </label>
+      <div class="linha-botoes">
+        <button id="btn-testar-voz" class="botao secundario" type="button">Testar voz</button>
+        <button id="btn-fechar-voz" class="botao secundario" type="button">Fechar</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- Só aparece com MODO=demonstracao (configuração do servidor) -->
+  <p id="aviso-simulado" class="aviso-simulado" role="note" hidden>
+    <svg class="icone" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="#i-alerta"/></svg>
+    <span><strong>Modo demonstração:</strong> os números são simulados e não vêm do medidor da casa.</span>
+  </p>
+
+  <!-- Comunicação com o medidor (ESP32) -->
+  <p id="conexao" class="conexao aguardando">
+    <span class="conexao-ponto" aria-hidden="true"></span>
+    <span><strong id="conexao-estado">Verificando o medidor…</strong> <span id="conexao-detalhe"></span></span>
+  </p>
+  <p id="status-conexao" class="status-conexao" role="status" hidden></p>
+
+  <nav class="abas" aria-label="Telas do aplicativo">
+    <a href="#conta" class="aba" data-tela="conta" aria-current="page">
+      <svg class="icone" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="#i-conta"/></svg><span>Minha conta</span>
+    </a>
+    <a href="#historico" class="aba" data-tela="historico">
+      <svg class="icone" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="#i-grafico"/></svg><span>Histórico</span>
+    </a>
+    <a href="#detalhe" class="aba" data-tela="detalhe">
+      <svg class="icone" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="#i-fluxo"/></svg><span>Detalhes</span>
+    </a>
+    <a href="#assistente" class="aba" data-tela="assistente">
+      <svg class="icone" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="#i-chat"/></svg><span>Assistente</span>
+    </a>
+  </nav>
+
+  <div class="periodo-barra" id="periodo-barra">
+    <span class="periodo-rotulo" id="periodo-rotulo">Período:</span>
+    <div class="periodo" role="group" aria-labelledby="periodo-rotulo">
+      <button class="botao-periodo" data-periodo="month" aria-pressed="true" type="button">Este mês</button>
+      <button class="botao-periodo" data-periodo="day" aria-pressed="false" type="button">Hoje</button>
+    </div>
+  </div>
+
+  <main id="conteudo" tabindex="-1">
+
+    <!-- =================== TELA: MINHA CONTA =================== -->
+    <section id="tela-conta" class="tela" aria-labelledby="tit-conta">
+      <h2 id="tit-conta" class="tela-titulo" tabindex="-1">Minha conta</h2>
+
+      <!-- Identificação, como no topo de uma conta de luz -->
+      <article class="cartao ident" id="card-ident" aria-labelledby="tit-ident">
+        <div class="ident-topo">
+          <h3 id="tit-ident">Conta de energia</h3>
+          <p id="status-energia" class="status-energia neutro">
+            <svg class="icone" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="#i-ok"/></svg>
+            <span>Carregando…</span>
+          </p>
+        </div>
+        <dl class="ident-grade">
+          <div><dt>Unidade consumidora</dt><dd id="id-unidade">—</dd></div>
+          <div><dt>Referência</dt><dd id="id-referencia">—</dd></div>
+          <div><dt>Última leitura do medidor</dt><dd id="id-leitura">—</dd></div>
+          <div><dt>Origem dos dados</dt><dd id="id-origem">—</dd></div>
+          <div><dt>Próxima leitura da concessionária</dt><dd id="id-proxima">—</dd></div>
+        </dl>
+      </article>
+
+      <button id="btn-ouvir-conta" class="botao destaque largo" type="button">
+        <svg class="icone" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="#i-som"/></svg>
+        Ouvir minha conta
+      </button>
+
+      <!-- Resumo energético: os três números principais -->
+      <section class="resumo" aria-labelledby="tit-resumo">
+        <h3 id="tit-resumo" class="secao-titulo">Resumo energético</h3>
+        <div class="resumo-grade">
+          <article class="kpi gen" id="card-gerada">
+            <svg class="kpi-icone" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="#i-sol"/></svg>
+            <h4 class="kpi-rotulo">Energia gerada</h4>
+            <p class="kpi-valor"><span id="v-geracao">—</span> <span class="unidade">kWh</span></p>
+            <span class="kpi-medidor" aria-hidden="true"><span id="m-geracao"></span></span>
+            <p class="sub">pelas placas solares</p>
+          </article>
+          <article class="kpi use" id="card-consumida">
+            <svg class="kpi-icone" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="#i-casa"/></svg>
+            <h4 class="kpi-rotulo">Energia consumida</h4>
+            <p class="kpi-valor"><span id="v-consumo">—</span> <span class="unidade">kWh</span></p>
+            <span class="kpi-medidor" aria-hidden="true"><span id="m-consumo"></span></span>
+            <p class="sub">pela sua casa</p>
+          </article>
+          <article class="kpi saldo" id="card-saldo">
+            <svg class="kpi-icone" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="#i-saldo"/></svg>
+            <h4 class="kpi-rotulo">Saldo energético</h4>
+            <p class="kpi-valor" id="v-saldo">—</p>
+            <p class="sub" id="v-saldo-txt">gerada − consumida</p>
+          </article>
+        </div>
+        <p class="aviso-parcial" id="aviso-parcial" role="note" hidden></p>
+      </section>
+
+      <article class="cartao" id="card-atendimento" aria-labelledby="tit-atend">
+        <h3 id="tit-atend">De onde veio a energia da casa</h3>
+        <p class="destaque-frase" id="atend-frase">—</p>
+        <div id="comp-consumo"></div>
+        <p class="sub nota-calculo" id="nota-fluxo"></p>
+      </article>
+
+      <article class="cartao" id="card-valor" aria-labelledby="tit-valor">
+        <h3 id="tit-valor">Valor estimado</h3>
+        <div class="valor-grade">
+          <div><p class="sub">A pagar (estimativa)</p><p class="valor-grande" id="v-custo">—</p></div>
+          <div><p class="sub">Economia com o sol</p><p class="valor-grande pos-txt" id="v-economia">—</p></div>
+        </div>
+        <details class="mais">
+          <summary>Como esse valor é calculado?</summary>
+          <p id="valor-explica">—</p>
+        </details>
+      </article>
+
+      <article class="cartao" aria-labelledby="tit-vivo">
+        <h3 id="tit-vivo">Agora, ao vivo</h3>
+        <div class="vivo-grade">
+          <div class="vivo-item">
+            <span class="rotulo">Gerando</span>
+            <span class="valor geracao" id="v-geracao-w">—</span>
+            <span class="unidade">W</span>
+          </div>
+          <div class="vivo-item">
+            <span class="rotulo">Consumindo</span>
+            <span class="valor consumo" id="v-consumo-w">—</span>
+            <span class="unidade">W</span>
+          </div>
+          <div class="vivo-item">
+            <span class="rotulo" id="v-saldo-w-rotulo">Saldo</span>
+            <span class="valor" id="v-saldo-w">—</span>
+            <span class="unidade">W</span>
+          </div>
+        </div>
+        <p class="sub" id="v-rede" hidden></p>
+        <p class="sub" id="v-atualizado">—</p>
+        <p class="vivo-historico" id="vivo-historico" hidden></p>
+        <button id="btn-ler-status" class="botao secundario largo" type="button">
+          <svg class="icone" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="#i-som"/></svg>
+          Ouvir como está agora
+        </button>
+      </article>
+
+      <article class="cartao" aria-labelledby="tit-atalhos">
+        <h3 id="tit-atalhos">Dúvidas sobre a conta?</h3>
+        <div class="atalhos">
+          <button class="pergunta" data-intencao="pagar" type="button">Quanto vou pagar?</button>
+          <button class="pergunta" data-intencao="c_maior" type="button">Estou consumindo mais do que gerando?</button>
+          <button class="pergunta" data-intencao="x_explica" type="button">Explique minha conta</button>
+        </div>
+        <a class="link-botao" href="#assistente">
+          <svg class="icone" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="#i-chat"/></svg>
+          Ver todas as perguntas no Assistente
+        </a>
+      </article>
+    </section>
+
+    <!-- =================== TELA: HISTÓRICO =================== -->
+    <section id="tela-historico" class="tela" aria-labelledby="tit-historico" hidden>
+      <h2 id="tit-historico" class="tela-titulo" tabindex="-1">Histórico energético</h2>
+
+      <article class="cartao" aria-labelledby="tit-hist">
+        <h3 id="tit-hist">Geração e consumo</h3>
+        <p class="sub" id="hist-sub">—</p>
+        <div class="totais">
+          <div class="total gen">
+            <svg class="icone total-icone" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="#i-sol"/></svg>
+            <div class="total-texto">
+              <span class="total-rotulo">Gerado pelo sol</span>
+              <span class="total-valor" id="tot-gen">—</span>
+              <span class="sub" id="tot-gen-pico"></span>
+            </div>
+          </div>
+          <div class="total use">
+            <svg class="icone total-icone" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="#i-casa"/></svg>
+            <div class="total-texto">
+              <span class="total-rotulo">Consumido pela casa</span>
+              <span class="total-valor" id="tot-use">—</span>
+              <span class="sub" id="tot-use-pico"></span>
+            </div>
+          </div>
+        </div>
+        <div id="graf-periodo" class="grafico" tabindex="0" role="img" aria-label="Gráfico de geração e consumo."></div>
+        <p id="leitura-periodo" class="grafico-leitura" aria-live="polite"></p>
+        <details class="tabela-alt">
+          <summary>Ver os mesmos dados em tabela</summary>
+          <div class="tabela-rolagem">
+            <table id="tabela-periodo">
+              <caption class="sr-only">Geração, consumo e saldo por período</caption>
+              <thead><tr><th scope="col">Período</th><th scope="col">Gerado (kWh)</th><th scope="col">Consumido (kWh)</th><th scope="col">Saldo (kWh)</th></tr></thead>
+              <tbody></tbody>
+            </table>
+          </div>
+        </details>
+      </article>
+
+      <article class="cartao" aria-labelledby="tit-saldo-evo">
+        <h3 id="tit-saldo-evo">Evolução do saldo</h3>
+        <p class="sub">Saldo acumulado (gerado − consumido) desde o início do período. Acima da linha: sobrou energia; abaixo: faltou e veio da rede.</p>
+        <div id="graf-saldo" class="grafico" tabindex="0" role="img" aria-label="Gráfico da evolução do saldo."></div>
+        <p id="leitura-saldo" class="grafico-leitura" aria-live="polite"></p>
+      </article>
+
+      <article class="cartao" aria-labelledby="tit-meses">
+        <h3 id="tit-meses">Histórico mensal</h3>
+        <p class="sub" id="meses-sub">Geração e consumo de cada mês com leituras.</p>
+        <div id="graf-meses" class="grafico" tabindex="0" role="img" aria-label="Gráfico do histórico mensal."></div>
+        <p id="leitura-meses" class="grafico-leitura" aria-live="polite"></p>
+        <details class="tabela-alt">
+          <summary>Ver os mesmos dados em tabela</summary>
+          <div class="tabela-rolagem">
+            <table id="tabela-meses">
+              <caption class="sr-only">Totais por mês</caption>
+              <thead><tr><th scope="col">Mês</th><th scope="col">Gerado (kWh)</th><th scope="col">Consumido (kWh)</th><th scope="col">Injetado (kWh)</th><th scope="col">Importado (kWh)</th><th scope="col">Dias com leitura</th></tr></thead>
+              <tbody></tbody>
+            </table>
+          </div>
+        </details>
+      </article>
+    </section>
+
+    <!-- =================== TELA: DETALHAMENTO =================== -->
+    <section id="tela-detalhe" class="tela" aria-labelledby="tit-detalhe" hidden>
+      <h2 id="tit-detalhe" class="tela-titulo" tabindex="-1">Detalhamento</h2>
+
+      <article class="cartao" aria-labelledby="tit-fluxo">
+        <h3 id="tit-fluxo">Fluxo de energia</h3>
+        <p class="sub" id="fluxo-sub">—</p>
+        <ol class="fluxos" id="fluxos"></ol>
+      </article>
+
+      <article class="cartao" aria-labelledby="tit-demo">
+        <h3 id="tit-demo">Demonstrativo de energia</h3>
+        <div class="tabela-rolagem">
+          <table class="demonstrativo" id="demonstrativo">
+            <caption class="sr-only">Demonstrativo de energia do período</caption>
+            <thead><tr><th scope="col">Item e origem do dado</th><th scope="col" class="num">kWh</th></tr></thead>
+            <tbody></tbody>
+          </table>
+        </div>
+        <ul class="legenda-origem">
+          <li><span class="origem medido">Medido</span> lido diretamente por um sensor.</li>
+          <li><span class="origem calculado">Calculado</span> obtido a partir das leituras dos sensores.</li>
+          <li><span class="origem indisponivel">Não disponível</span> só a concessionária registra.</li>
+        </ul>
+      </article>
+
+      <article class="cartao" aria-labelledby="tit-uso">
+        <h3 id="tit-uso">Uso da energia solar</h3>
+        <div id="comp-geracao"></div>
+        <div id="comp-consumo-det"></div>
+      </article>
+
+      <details class="cartao mais" id="como-obtido">
+        <summary>Como os valores são obtidos</summary>
+        <div id="como-obtido-texto"></div>
+      </details>
+    </section>
+
+    <!-- =================== TELA: ASSISTENTE =================== -->
+    <section id="tela-assistente" class="tela" aria-labelledby="tit-assistente" hidden>
+      <h2 id="tit-assistente" class="tela-titulo" tabindex="-1">Assistente</h2>
+      <p class="sub">Escolha um assunto e toque numa pergunta. As respostas usam os dados da sua casa.</p>
+
+      <div class="categorias" role="tablist" aria-label="Assuntos">
+        <button role="tab" id="aba-agora" aria-controls="painel-agora" aria-selected="true" type="button">
+          <svg class="icone" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="#i-rede"/></svg>Agora</button>
+        <button role="tab" id="aba-gen" aria-controls="painel-gen" aria-selected="false" tabindex="-1" type="button">
+          <svg class="icone" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="#i-sol"/></svg>Geração</button>
+        <button role="tab" id="aba-cons" aria-controls="painel-cons" aria-selected="false" tabindex="-1" type="button">
+          <svg class="icone" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="#i-casa"/></svg>Consumo</button>
+        <button role="tab" id="aba-eco" aria-controls="painel-eco" aria-selected="false" tabindex="-1" type="button">
+          <svg class="icone" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="#i-saldo"/></svg>Economia</button>
+        <button role="tab" id="aba-conta" aria-controls="painel-conta" aria-selected="false" tabindex="-1" type="button">
+          <svg class="icone" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="#i-conta"/></svg>Conta</button>
+      </div>
+      <div role="tabpanel" id="painel-agora" aria-labelledby="aba-agora" class="perguntas">
+        <button class="pergunta" data-intencao="agora_gerando" type="button">Quanto estou gerando agora?</button>
+        <button class="pergunta" data-intencao="agora_consumindo" type="button">Quanto minha residência está consumindo?</button>
+        <button class="pergunta" data-intencao="agora_rede" type="button">Estou importando ou exportando energia agora?</button>
+        <button class="pergunta" data-intencao="g_hoje" type="button">Qual foi minha geração hoje?</button>
+      </div>
+      <div role="tabpanel" id="painel-gen" aria-labelledby="aba-gen" class="perguntas" hidden>
+        <button class="pergunta" data-intencao="g_mes" type="button">Quanto meu sistema solar gerou este mês?</button>
+        <button class="pergunta" data-intencao="g_esperado" type="button">Minha geração está dentro do esperado?</button>
+        <button class="pergunta" data-intencao="g_pico" type="button">Qual foi o dia de maior geração?</button>
+        <button class="pergunta" data-intencao="g_aproveito" type="button">Estou aproveitando toda a energia produzida?</button>
+      </div>
+      <div role="tabpanel" id="painel-cons" aria-labelledby="aba-cons" class="perguntas" hidden>
+        <button class="pergunta" data-intencao="c_mes" type="button">Quanto minha residência consumiu?</button>
+        <button class="pergunta" data-intencao="c_pico" type="button">Qual foi meu maior consumo hoje?</button>
+        <button class="pergunta" data-intencao="c_vs_mes" type="button">Meu consumo aumentou em relação ao mês passado?</button>
+        <button class="pergunta" data-intencao="c_maior" type="button">Estou consumindo mais energia do que gerando?</button>
+      </div>
+      <div role="tabpanel" id="painel-eco" aria-labelledby="aba-eco" class="perguntas" hidden>
+        <button class="pergunta" data-intencao="e_economia" type="button">Quanto estou economizando com energia solar?</button>
+        <button class="pergunta" data-intencao="e_comprando" type="button">Quanto de energia estou comprando da concessionária?</button>
+        <button class="pergunta" data-intencao="e_exportando" type="button">Quanto estou exportando para a rede?</button>
+        <button class="pergunta" data-intencao="e_creditos" type="button">Estou acumulando créditos energéticos?</button>
+        <button class="pergunta" data-intencao="e_reduzir" type="button">Como posso reduzir meu consumo?</button>
+      </div>
+      <div role="tabpanel" id="painel-conta" aria-labelledby="aba-conta" class="perguntas" hidden>
+        <button class="pergunta" data-intencao="x_explica" type="button">Explique minha conta de energia.</button>
+        <button class="pergunta" data-intencao="x_injetada" type="button">O que significa energia injetada na rede?</button>
+        <button class="pergunta" data-intencao="x_compensada" type="button">Qual a diferença entre energia gerada e compensada?</button>
+        <button class="pergunta" data-intencao="x_saldo" type="button">Como interpretar meu saldo energético?</button>
+      </div>
+
+      <div class="conversa-barra">
+        <h3 class="secao-titulo">Conversa</h3>
+        <div class="linha-botoes">
+          <button id="btn-repetir" class="botao secundario pequeno" type="button" disabled>Repetir resposta</button>
+          <button id="btn-parar-audio" class="botao secundario pequeno" type="button">Parar áudio</button>
+          <button id="btn-limpar" class="botao secundario pequeno" type="button">Limpar</button>
+        </div>
+      </div>
+      <div id="conversa" class="conversa" role="log" aria-label="Conversa com o assistente" aria-live="off">
+        <p class="conversa-vazia" id="conversa-vazia">As respostas aparecem aqui.</p>
+      </div>
+
+      <details class="cartao mais" id="digitar-falar">
+        <summary>Prefere digitar ou falar a pergunta?</summary>
+        <form id="form-pergunta" class="form-pergunta">
+          <label for="campo-pergunta">Sua pergunta</label>
+          <div class="form-linha">
+            <input id="campo-pergunta" type="text" autocomplete="off" enterkeyhint="send"
+                   placeholder="Ex.: quanto gerei hoje?" />
+            <button class="botao" type="submit">Perguntar</button>
+          </div>
+        </form>
+        <div id="por-voz" class="por-voz">
+          <button id="btn-perguntar" class="botao secundario largo" type="button" aria-pressed="false">
+            <svg class="icone" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="#i-mic"/></svg>
+            <span id="btn-perguntar-txt">Perguntar falando</span>
+          </button>
+          <p class="sub aviso-voz" id="voz-aviso" role="status" hidden></p>
+        </div>
+      </details>
+    </section>
+  </main>
+
+  <!-- Controles de leitura em voz alta: aparecem enquanto o app fala -->
+  <div id="barra-fala" class="barra-fala" role="region" aria-label="Leitura em voz alta" hidden>
+    <p class="barra-fala-txt"><span class="onda" aria-hidden="true"></span><span id="barra-fala-titulo">Lendo em voz alta…</span></p>
+    <div class="barra-fala-botoes">
+      <button id="btn-anterior" class="botao-fala" type="button" aria-label="Voltar para a seção anterior">
+        <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M6 5v14M19 5 9 12l10 7Z" fill="currentColor" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg>
+      </button>
+      <button id="btn-pausa" class="botao-fala" type="button" aria-label="Pausar">
+        <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path id="ico-pausa" d="M7 5h3v14H7zM14 5h3v14h-3z" fill="currentColor"/></svg>
+      </button>
+      <button id="btn-proximo" class="botao-fala" type="button" aria-label="Avançar para a próxima seção">
+        <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M18 5v14M5 5l10 7-10 7Z" fill="currentColor" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg>
+      </button>
+      <button id="btn-parar" class="botao-fala parar" type="button" aria-label="Parar a leitura">
+        <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><rect x="6" y="6" width="12" height="12" rx="2" fill="currentColor"/></svg>
+      </button>
+    </div>
+  </div>
+
+  <!-- Região viva para anúncios ao leitor de tela -->
+  <div id="anuncio" class="sr-only" aria-live="polite" role="status"></div>
+
+  <footer class="rodape">
+    <p>Protótipo de extensão universitária • <span id="fonte-dados">—</span></p>
+    <p>Atalho: tecla <kbd>Esc</kbd> para parar a leitura em voz alta.</p>
+  </footer>
+
+  <script src="util.js"></script>
+  <script src="mock.js"></script>
+  <script src="voz.js"></script>
+  <script src="graficos.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
