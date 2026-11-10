@@ -1,0 +1,3173 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="theme-color" content="#0B5FA5" />
+  <title>Casa Solar — Conta de Energia</title>
+  <link rel="icon" href="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA1MTIgNTEyIiByb2xlPSJpbWciIGFyaWEtbGFiZWw9Ik1vbml0b3IgZGUgRW5lcmdpYSI+CiAgPHJlY3Qgd2lkdGg9IjUxMiIgaGVpZ2h0PSI1MTIiIHJ4PSI5NiIgZmlsbD0iIzBiNWZhNSIvPgogIDxjaXJjbGUgY3g9IjI1NiIgY3k9IjIzMCIgcj0iOTYiIGZpbGw9IiNmMGI0NGIiLz4KICA8ZyBzdHJva2U9IiNmMGI0NGIiIHN0cm9rZS13aWR0aD0iMjAiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCI+CiAgICA8bGluZSB4MT0iMjU2IiB5MT0iNzAiIHgyPSIyNTYiIHkyPSIxMDQiLz4KICAgIDxsaW5lIHgxPSIyNTYiIHkxPSIzNTYiIHgyPSIyNTYiIHkyPSIzOTAiLz4KICAgIDxsaW5lIHgxPSI5NiIgeTE9IjIzMCIgeDI9IjEzMCIgeTI9IjIzMCIvPgogICAgPGxpbmUgeDE9IjM4MiIgeTE9IjIzMCIgeDI9IjQxNiIgeTI9IjIzMCIvPgogICAgPGxpbmUgeDE9IjE0MyIgeTE9IjExNyIgeDI9IjE2NyIgeTI9IjE0MSIvPgogICAgPGxpbmUgeDE9IjM0NSIgeTE9IjMxOSIgeDI9IjM2OSIgeTI9IjM0MyIvPgogICAgPGxpbmUgeDE9IjM2OSIgeTE9IjExNyIgeDI9IjM0NSIgeTI9IjE0MSIvPgogICAgPGxpbmUgeDE9IjE2NyIgeTE9IjMxOSIgeDI9IjE0MyIgeTI9IjM0MyIvPgogIDwvZz4KICA8cGF0aCBkPSJNMjcwIDE3NiAyMTQgMjUwIDI1MiAyNTAgMjQyIDMyMCAzMDAgMjM2IDI2MCAyMzYgWiIgZmlsbD0iIzBiNWZhNSIgc3Ryb2tlPSIjZmZmIiBzdHJva2Utd2lkdGg9IjEwIiBzdHJva2UtbGluZWpvaW49InJvdW5kIi8+Cjwvc3ZnPgo=" type="image/svg+xml" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet" />
+  <style>
+/* Tokens: cor com significado + acessibilidade como identidade.
+   Âmbar = geração solar · Azul = consumo · Verde = sobra/excedente ·
+   Vermelho = energia da rede/déficit. Texto sempre em tons de tinta;
+   a cor fica nas marcas (barras, ícones), com texto ao lado.
+   Pares de barras validados para daltonismo (OKLab ΔE ≥ 8, Machado 2009)
+   e contraste ≥ 3:1 com a superfície, nos temas claro, escuro e contraste. */
+:root {
+  color-scheme: light dark;
+  --bg: #eef2f5;
+  --surface: #ffffff;
+  --surface-2: #f6f8fa;
+  --ink: #0d1117;
+  --muted: #464f5a;
+  --line: #cfd6dd;
+  --use: #0b5fa5;   /* consumo (texto) */
+  --gen: #8a5200;   /* geração solar (texto AA) */
+  --pos: #17733b;   /* saldo positivo (texto) */
+  --neg: #b0261c;   /* saldo negativo (texto) */
+  --accent: #0b5fa5;
+  --on-accent: #ffffff; /* texto sobre fundo --accent */
+  --bar-use: #0b5fa5;   /* marcas de consumo */
+  --bar-gen: #c27a0e;   /* marcas de geração solar */
+  --bar-pos: #17733b;   /* marcas de excedente/injetada */
+  --bar-neg: #b0261c;   /* marcas de energia da rede */
+  --bar-neutro: #6b7480;
+  --focus: #0b5fa5;
+  --radius: 16px;
+  --sombra: 0 1px 2px rgb(13 17 23 / .06), 0 4px 14px rgb(13 17 23 / .06);
+  --safe-t: env(safe-area-inset-top, 0px);
+  --safe-b: env(safe-area-inset-bottom, 0px);
+  --nav-h: 0px;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-tema="claro"]):not([data-tema="contraste"]) {
+    --bg: #0e1116; --surface: #171c22; --surface-2: #1d232b; --ink: #f1f4f7; --muted: #aab3be;
+    --line: #2f3741; --use: #6fb2f0; --gen: #f0b44b; --pos: #57c97f;
+    --neg: #f0857a; --accent: #6fb2f0; --on-accent: #0d1117; --focus: #8fc4ff;
+    --bar-use: #3a8bd6; --bar-gen: #c98420; --bar-pos: #57c97f; --bar-neg: #d9486e; --bar-neutro: #8792a0;
+    --sombra: none;
+  }
+}
+/* Modo alto contraste acionado pelo botão */
+:root[data-tema="contraste"] {
+  --bg: #000000; --surface: #000000; --surface-2: #000000; --ink: #ffffff; --muted: #eaeaea;
+  --line: #ffffff; --use: #7cc0ff; --gen: #ffcf5c; --pos: #7be39a;
+  --neg: #ff9a8f; --accent: #ffe14d; --on-accent: #000000; --focus: #ffe14d;
+  --bar-use: #3a8bd6; --bar-gen: #c98420; --bar-pos: #57c97f; --bar-neg: #d9486e; --bar-neutro: #b8c0ca;
+  --sombra: none;
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+
+/* Botão "Texto maior": tudo é em rem, então escala junto */
+html[data-texto="grande"] { font-size: 125%; }
+
+body {
+  margin: 0 auto;
+  font-family: "Atkinson Hyperlegible", system-ui, -apple-system, sans-serif;
+  font-size: 1.125rem;
+  line-height: 1.5;
+  color: var(--ink);
+  background: var(--bg);
+  padding: var(--safe-t) 1rem calc(2rem + var(--safe-b) + var(--nav-h));
+  max-width: 980px;
+}
+
+/* Foco sempre visível e forte (navegação por teclado) */
+:focus-visible { outline: 3px solid var(--focus); outline-offset: 3px; border-radius: 6px; }
+[tabindex="-1"]:focus { outline: none; }
+
+.skip-link {
+  position: absolute; left: -999px; top: 0;
+  background: var(--accent); color: var(--on-accent); padding: .75rem 1rem;
+  border-radius: 0 0 8px 0; z-index: 50; font-weight: 700;
+}
+.skip-link:focus { left: 0; }
+
+.sr-only {
+  position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px;
+  overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0;
+}
+
+h1, h2, h3, h4 { line-height: 1.2; }
+.sub { color: var(--muted); font-size: .95rem; margin: .25rem 0 0; }
+.unidade { color: var(--muted); font-weight: 400; font-size: .6em; }
+.pos-txt { color: var(--pos); }
+.neg-txt { color: var(--neg); }
+.aviso { color: var(--neg); font-weight: 700; }
+kbd { font-family: inherit; border: 1px solid var(--line); border-radius: 4px; padding: 0 .3rem; }
+
+/* ---------------- Topo ---------------- */
+.topo {
+  display: flex; align-items: center; justify-content: space-between;
+  gap: .75rem; flex-wrap: wrap; padding: 1rem 0 .5rem;
+}
+.marca { display: flex; align-items: center; gap: .6rem; }
+.marca-icone { width: 2.2rem; height: 2.2rem; color: var(--bar-gen); flex: 0 0 auto; }
+.topo h1 { font-size: 1.45rem; margin: 0; display: flex; flex-direction: column; }
+.marca-sub { font-size: .9rem; font-weight: 400; color: var(--muted); }
+.topo-acoes { display: flex; gap: .5rem; flex-wrap: wrap; }
+.rotulo-curto { display: none; }
+
+.aviso-simulado, .status-conexao {
+  display: flex; gap: .6rem; align-items: flex-start;
+  margin: .5rem 0 0; padding: .7rem 1rem; border-radius: 12px; font-size: 1rem;
+}
+.aviso-simulado { border: 2px dashed var(--bar-gen); background: color-mix(in srgb, var(--bar-gen) 10%, var(--surface)); }
+.aviso-simulado .icone { color: var(--gen); margin-top: .1rem; }
+/* Comunicação com o medidor: ponto + texto (estado nunca só pela cor) */
+.conexao { display: flex; align-items: flex-start; gap: .6rem; margin: .6rem 0 0; padding: .6rem .9rem;
+  border-radius: 12px; border: 1px solid var(--line); background: var(--surface); font-size: .98rem; }
+.conexao-ponto { width: 12px; height: 12px; border-radius: 50%; margin-top: .4rem; flex: 0 0 auto; background: var(--bar-neutro); }
+.conexao.ok .conexao-ponto { background: var(--bar-pos); box-shadow: 0 0 0 3px color-mix(in srgb, var(--bar-pos) 25%, transparent); }
+.conexao.atraso { border: 2px solid var(--bar-gen); }
+.conexao.atraso .conexao-ponto { background: var(--bar-gen); }
+.conexao.off { border: 2px solid var(--neg); }
+.conexao.off .conexao-ponto { background: var(--bar-neg); }
+.conexao.aguardando .conexao-ponto { background: transparent; border: 2px dashed var(--muted); }
+.aviso-parcial, .vivo-historico { margin: .75rem 0 0; padding: .6rem .8rem; border-radius: 10px;
+  border: 2px dashed var(--bar-gen); background: color-mix(in srgb, var(--bar-gen) 8%, var(--surface)); font-size: .98rem; }
+.vivo-historico { font-weight: 700; }
+.status-conexao { border: 2px solid var(--neg); font-weight: 700; background: color-mix(in srgb, var(--neg) 10%, var(--surface)); }
+[hidden] { display: none !important; }
+
+/* ---------------- Navegação entre telas ---------------- */
+.abas {
+  display: flex; gap: .4rem; margin: .9rem 0 0;
+  background: var(--surface); border: 1px solid var(--line); border-radius: 14px; padding: .3rem;
+  box-shadow: var(--sombra);
+}
+.aba {
+  flex: 1 1 0; display: flex; align-items: center; justify-content: center; gap: .45rem;
+  min-height: 52px; padding: .4rem .5rem; border-radius: 10px;
+  color: var(--muted); font-weight: 700; text-decoration: none; text-align: center; line-height: 1.15;
+}
+.aba .icone { width: 1.4em; height: 1.4em; }
+.aba:hover { color: var(--ink); background: var(--surface-2); }
+/* Tela atual: fundo + cor + barra inferior (não depende só da cor) */
+.aba[aria-current="page"] { background: var(--accent); color: var(--on-accent); box-shadow: inset 0 -4px 0 color-mix(in srgb, var(--on-accent) 55%, transparent); }
+
+/* Celular: navegação fixa na parte de baixo, ao alcance do polegar */
+@media (max-width: 700px) {
+  :root { --nav-h: 72px; }
+  .abas {
+    position: fixed; left: 0; right: 0; bottom: 0; z-index: 30; margin: 0;
+    border-radius: 0; border-width: 1px 0 0; padding: .3rem .4rem calc(.3rem + var(--safe-b));
+  }
+  .aba { flex-direction: column; gap: .15rem; font-size: .8rem; min-height: 60px; }
+}
+
+.periodo-barra { display: flex; align-items: center; gap: .75rem; flex-wrap: wrap; margin: 1rem 0 0; }
+.periodo-rotulo { font-weight: 700; }
+.periodo { display: flex; gap: .5rem; }
+
+/* ---------------- Telas e cartões ---------------- */
+.tela-titulo { font-size: 1.5rem; margin: 1.25rem 0 .25rem; }
+.secao-titulo { font-size: 1.2rem; margin: 1.5rem 0 .6rem; }
+.cartao {
+  background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius);
+  padding: 1.15rem 1.25rem; margin-top: 1rem; box-shadow: var(--sombra);
+}
+.cartao h3 { font-size: 1.2rem; margin: 0 0 .5rem; }
+.cartao > h2 { font-size: 1.3rem; margin: 0 0 .75rem; }
+
+/* Trecho sendo lido em voz alta: contorno grosso + fundo (acompanhar leitura) */
+.lendo { outline: 4px solid var(--bar-gen) !important; outline-offset: 3px; background-color: color-mix(in srgb, var(--bar-gen) 14%, var(--surface)) !important; }
+.frase { border-radius: 4px; transition: background-color .15s; }
+.frase.lendo { outline-width: 2px !important; outline-offset: 1px; background-color: color-mix(in srgb, var(--bar-gen) 30%, transparent) !important; }
+
+/* ---------------- Minha conta ---------------- */
+.ident { border-top: 6px solid var(--accent); }
+.ident-topo { display: flex; justify-content: space-between; align-items: center; gap: .75rem; flex-wrap: wrap; margin-bottom: .5rem; }
+.ident-topo h3 { margin: 0; }
+.status-energia {
+  display: inline-flex; align-items: center; gap: .45rem; margin: 0;
+  padding: .35rem .75rem; border-radius: 999px; font-weight: 700; font-size: .95rem;
+  border: 2px solid currentColor;
+}
+.status-energia.pos { color: var(--pos); background: color-mix(in srgb, var(--pos) 10%, var(--surface)); }
+.status-energia.neg { color: var(--neg); background: color-mix(in srgb, var(--neg) 10%, var(--surface)); }
+.status-energia.neutro { color: var(--muted); }
+.ident-grade { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: .6rem 1.25rem; margin: 0; }
+.ident-grade dt { color: var(--muted); font-size: .9rem; }
+.ident-grade dd { margin: 0; font-weight: 700; }
+
+.botao.destaque {
+  margin-top: 1rem; min-height: 64px; font-size: 1.3rem; border-radius: 14px;
+  box-shadow: var(--sombra);
+}
+.botao.destaque .icone { width: 1.6em; height: 1.6em; }
+
+.resumo-grade { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: .75rem; }
+.kpi {
+  position: relative; background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius);
+  padding: 1rem; box-shadow: var(--sombra); border-top: 6px solid var(--line);
+}
+.kpi.gen { border-top-color: var(--bar-gen); }
+.kpi.use { border-top-color: var(--bar-use); }
+.kpi.saldo { border-top-color: var(--bar-pos); }
+.kpi.saldo.negativo { border-top-color: var(--bar-neg); }
+.kpi-icone { width: 2rem; height: 2rem; }
+.kpi.gen .kpi-icone { color: var(--bar-gen); }
+.kpi.use .kpi-icone { color: var(--bar-use); }
+.kpi.saldo .kpi-icone { color: var(--bar-pos); }
+.kpi.saldo.negativo .kpi-icone { color: var(--bar-neg); }
+.kpi-rotulo { margin: .25rem 0 0; font-size: 1rem; color: var(--muted); font-weight: 700; }
+.kpi-valor { margin: .1rem 0 0; font-size: 2rem; font-weight: 700; font-variant-numeric: tabular-nums; line-height: 1.15; }
+.kpi-medidor { display: block; height: 8px; border-radius: 4px; background: var(--surface-2); border: 1px solid var(--line); margin: .5rem 0 .1rem; overflow: hidden; }
+.kpi-medidor > span { display: block; height: 100%; width: 0; border-radius: 4px; transition: width .4s; }
+.kpi.gen .kpi-medidor > span { background: var(--bar-gen); }
+.kpi.use .kpi-medidor > span { background: var(--bar-use); }
+
+.destaque-frase { font-size: 1.25rem; font-weight: 700; margin: .25rem 0 .75rem; }
+.nota-calculo { margin-top: .75rem; }
+
+.valor-grade { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+.valor-grade .sub { margin: 0; }
+.valor-grande { font-size: 1.9rem; font-weight: 700; margin: 0; font-variant-numeric: tabular-nums; }
+details.mais { margin-top: .75rem; }
+details.mais > summary {
+  cursor: pointer; font-weight: 700; color: var(--accent); min-height: 48px;
+  display: flex; align-items: center; gap: .4rem;
+}
+details.cartao.mais > summary { font-size: 1.1rem; }
+
+.vivo-grade { display: grid; grid-template-columns: repeat(3, 1fr); gap: .5rem; text-align: center; }
+.vivo-item { border: 1px solid var(--line); border-radius: 12px; padding: .75rem .25rem; }
+.vivo-item .rotulo { display: block; color: var(--muted); font-size: .9rem; }
+.vivo-item .valor { display: block; font-size: 1.7rem; font-weight: 700; font-variant-numeric: tabular-nums; }
+.vivo-item .valor.consumo { color: var(--use); }
+.vivo-item .valor.geracao { color: var(--gen); }
+#btn-ler-status { margin-top: .75rem; }
+
+.atalhos { display: grid; gap: .5rem; }
+.link-botao {
+  display: flex; align-items: center; justify-content: center; gap: .5rem; margin-top: .75rem;
+  min-height: 48px; font-weight: 700; color: var(--accent); text-decoration: underline; text-underline-offset: 3px;
+}
+
+/* ---------------- Botões (alvos ≥ 48px) ---------------- */
+.botao, .botao-periodo, .botao-icone {
+  font-family: inherit; font-size: 1.05rem; font-weight: 700;
+  min-height: 48px; padding: .65rem 1.1rem; cursor: pointer;
+  border-radius: 10px; border: 2px solid var(--accent);
+  background: var(--accent); color: var(--on-accent);
+  display: inline-flex; align-items: center; justify-content: center; gap: .55rem;
+}
+.botao.largo { width: 100%; }
+.botao.pequeno { min-height: 44px; padding: .4rem .8rem; font-size: .95rem; }
+.botao.secundario, .botao-icone, .botao-periodo { background: transparent; color: var(--accent); }
+.botao-periodo[aria-pressed="true"], .botao-icone[aria-pressed="true"], .botao-icone[aria-expanded="true"] {
+  background: var(--accent); color: var(--on-accent);
+}
+.botao:hover, .botao-periodo:hover, .botao-icone:hover { filter: brightness(1.08); }
+.botao:disabled { opacity: .5; cursor: not-allowed; }
+.linha-botoes { display: flex; gap: .5rem; flex-wrap: wrap; }
+.icone { width: 1.35em; height: 1.35em; flex: 0 0 auto; }
+
+.pergunta {
+  font: inherit; font-size: 1.05rem; font-weight: 700; text-align: left; line-height: 1.3;
+  min-height: 56px; padding: .7rem 1rem; cursor: pointer; width: 100%;
+  border-radius: 12px; border: 2px solid var(--line); background: var(--surface-2); color: var(--ink);
+  display: flex; align-items: center; gap: .6rem;
+}
+.pergunta::before { content: "?"; flex: 0 0 auto; display: grid; place-items: center; width: 1.8rem; height: 1.8rem;
+  border-radius: 50%; background: var(--accent); color: var(--on-accent); font-size: 1rem; }
+.pergunta:hover { border-color: var(--accent); }
+
+/* ---------------- Gráficos ---------------- */
+.totais { display: grid; grid-template-columns: 1fr 1fr; gap: .75rem; margin: .75rem 0 1rem; }
+.total { display: flex; gap: .65rem; align-items: flex-start; border: 1px solid var(--line); border-radius: 12px; padding: .8rem .9rem; }
+.total-icone { width: 2rem; height: 2rem; }
+.total.gen .total-icone { color: var(--bar-gen); }
+.total.use .total-icone { color: var(--bar-use); }
+.total-texto { display: flex; flex-direction: column; min-width: 0; }
+.total-rotulo { color: var(--muted); font-size: .95rem; }
+.total-valor { font-size: 1.5rem; font-weight: 700; font-variant-numeric: tabular-nums; }
+
+.grafico { position: relative; width: 100%; touch-action: pan-y; cursor: crosshair; border-radius: 8px; min-height: 60px; }
+.grafico.mini { cursor: default; }
+.grafico svg { display: block; }
+.grafico-vazio { margin: 0; padding: 1.5rem 1rem; text-align: center; color: var(--muted); border: 2px dashed var(--line); border-radius: 12px; }
+.g-gen { fill: var(--bar-gen); }
+.g-use { fill: var(--bar-use); }
+.g-grade { stroke: var(--line); stroke-width: 1; stroke-dasharray: 3 4; }
+.g-base { stroke: var(--muted); stroke-width: 1; }
+.g-escala, .g-eixo { fill: var(--muted); font-size: 12px; font-family: inherit; font-variant-numeric: tabular-nums; }
+.g-serie { fill: var(--ink); font-size: 13px; font-weight: 700; font-family: inherit; }
+.g-agora { fill: var(--ink); opacity: .05; }
+.g-sel { fill: none; stroke: var(--ink); stroke-width: 2; }
+.g-area-pos { fill: var(--bar-pos); opacity: .18; }
+.g-area-neg { fill: var(--bar-neg); opacity: .18; }
+.g-linha-pos, .g-linha-neg { fill: none; stroke-width: 2.5; stroke-linejoin: round; stroke-linecap: round; }
+.g-linha-pos { stroke: var(--bar-pos); }
+.g-linha-neg { stroke: var(--bar-neg); }
+.g-cruz { stroke: var(--muted); stroke-width: 1; stroke-dasharray: 2 3; }
+.g-ponto { stroke: var(--surface); stroke-width: 2; }
+.g-ponto.pos { fill: var(--bar-pos); }
+.g-ponto.neg { fill: var(--bar-neg); }
+.grafico-leitura {
+  margin: .5rem 0 0; padding: .6rem .8rem; border-radius: 10px; min-height: 2.9rem;
+  background: var(--surface-2); font-weight: 700; font-variant-numeric: tabular-nums;
+}
+.grafico-leitura:empty { display: none; }
+
+/* Composição: barra empilhada com 2px de respiro entre as partes */
+.composicao { margin-top: .5rem; }
+.composicao + .composicao { margin-top: 1.25rem; }
+.composicao-titulo { margin: 0 0 .35rem; font-weight: 700; }
+.composicao-barra { display: flex; gap: 2px; height: 22px; border-radius: 6px; overflow: hidden; background: var(--surface-2); }
+.composicao-barra .seg { display: block; height: 100%; min-width: 3px; }
+.composicao-legenda { list-style: none; padding: 0; margin: .5rem 0 0; display: grid; gap: .25rem; font-variant-numeric: tabular-nums; }
+.composicao-legenda li { display: flex; align-items: center; gap: .5rem; }
+.amostra { width: 14px; height: 14px; border-radius: 3px; display: inline-block; flex: 0 0 auto; }
+.seg.gen, .amostra.gen { background: var(--bar-gen); }
+.seg.use, .amostra.use { background: var(--bar-use); }
+.seg.pos, .amostra.pos { background: var(--bar-pos); }
+.seg.neg, .amostra.neg { background: var(--bar-neg); }
+.seg.neutro, .amostra.neutro { background: var(--bar-neutro); }
+
+.comparativo { display: grid; gap: .5rem; }
+.comp-linha { display: grid; grid-template-columns: minmax(6.5rem, 34%) 1fr auto; gap: .6rem; align-items: center; }
+.comp-rotulo { font-size: .95rem; }
+.comp-barra { height: 16px; border-radius: 4px; background: var(--surface-2); overflow: hidden; }
+.comp-barra .seg { display: block; height: 100%; border-radius: 0 4px 4px 0; min-width: 2px; }
+.comp-valor { font-weight: 700; font-variant-numeric: tabular-nums; white-space: nowrap; }
+
+/* ---------------- Detalhamento ---------------- */
+.fluxos { list-style: none; padding: 0; margin: .75rem 0 0; display: grid; gap: .75rem; }
+.fluxo {
+  display: grid; grid-template-columns: auto 1fr auto; align-items: center; gap: .5rem;
+  border: 1px solid var(--line); border-radius: 12px; padding: .75rem; border-left: 6px solid var(--line);
+}
+.fluxo.f-auto { border-left-color: var(--bar-gen); }
+.fluxo.f-inj { border-left-color: var(--bar-pos); }
+.fluxo.f-imp { border-left-color: var(--bar-neg); }
+.no { display: inline-flex; flex-direction: column; align-items: center; gap: .1rem; font-weight: 700; font-size: .9rem; min-width: 4rem; }
+.no .icone { width: 1.8rem; height: 1.8rem; }
+.no.gen .icone { color: var(--bar-gen); }
+.no.use .icone { color: var(--bar-use); }
+.no.rede .icone { color: var(--muted); }
+.seta { height: 3px; background: var(--muted); position: relative; border-radius: 2px; }
+.seta::after { content: ""; position: absolute; right: -2px; top: 50%; transform: translateY(-50%);
+  border: 7px solid transparent; border-left: 10px solid var(--muted); border-right: 0; }
+.fluxo-texto { grid-column: 1 / -1; margin: .1rem 0 0; font-size: 1.05rem; }
+.fluxo-texto strong { font-size: 1.25rem; font-variant-numeric: tabular-nums; }
+
+.tabela-rolagem { overflow-x: auto; }
+table { width: 100%; border-collapse: collapse; margin-top: .5rem; }
+th, td { text-align: left; padding: .6rem .5rem; border-bottom: 1px solid var(--line); font-variant-numeric: tabular-nums; vertical-align: top; }
+thead th { font-size: .9rem; color: var(--muted); }
+.num { text-align: right; white-space: nowrap; }
+.demonstrativo tbody th { font-weight: 400; }
+.demonstrativo .item-nome { display: block; margin-bottom: .25rem; }
+.demonstrativo .total-linha th, .demonstrativo .total-linha td { font-weight: 700; border-top: 2px solid var(--ink); border-bottom: none; }
+.origem { display: inline-block; font-size: .85rem; font-weight: 700; padding: .1rem .5rem; border-radius: 6px; border: 1.5px solid currentColor; }
+/* Selos neutros (verde/azul já significam excedente/consumo): o estilo da borda diferencia */
+.origem.medido { color: var(--ink); }
+.origem.calculado { color: var(--ink); border-style: dashed; }
+.origem.indisponivel { color: var(--muted); border-style: dotted; }
+.legenda-origem { list-style: none; padding: 0; margin: .75rem 0 0; display: grid; gap: .35rem; font-size: .95rem; color: var(--muted); }
+.tabela-alt { margin-top: .75rem; }
+.tabela-alt summary { cursor: pointer; font-weight: 700; color: var(--accent); min-height: 48px; display: flex; align-items: center; }
+
+/* ---------------- Assistente ---------------- */
+.categorias { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: .4rem; margin: 1rem 0 .75rem; }
+.categorias [role="tab"] {
+  font: inherit; font-weight: 700; font-size: 1rem; min-height: 52px; cursor: pointer;
+  border: 2px solid var(--line); border-radius: 12px; background: var(--surface); color: var(--ink);
+  display: flex; align-items: center; justify-content: center; gap: .4rem; padding: .4rem;
+}
+.categorias [role="tab"][aria-selected="true"] { border-color: var(--accent); background: var(--accent); color: var(--on-accent); }
+.perguntas { display: grid; grid-template-columns: 1fr 1fr; gap: .5rem; }
+
+.conversa-barra { display: flex; justify-content: space-between; align-items: center; gap: .5rem; flex-wrap: wrap; margin-top: 1.25rem; }
+.conversa-barra .secao-titulo { margin: 0; }
+.conversa { display: grid; gap: .9rem; margin-top: .75rem; }
+.conversa-vazia { color: var(--muted); text-align: center; border: 2px dashed var(--line); border-radius: 12px; padding: 1.25rem; margin: 0; }
+.msg { display: grid; gap: .4rem; }
+.msg-pergunta {
+  justify-self: end; max-width: 85%; margin: 0; padding: .55rem .9rem; border-radius: 14px 14px 4px 14px;
+  background: var(--accent); color: var(--on-accent); font-weight: 700;
+}
+.msg-resposta {
+  max-width: 100%; padding: .9rem 1rem; border-radius: 14px 14px 14px 4px;
+  background: var(--surface); border: 1px solid var(--line); box-shadow: var(--sombra);
+  display: grid; gap: .75rem;
+}
+.msg-texto { margin: 0; font-size: 1.1rem; }
+.msg-nota { margin: 0; font-size: .9rem; }
+.msg-visual { padding: .25rem 0; }
+.form-pergunta label { display: block; font-weight: 700; margin-bottom: .35rem; }
+.form-linha { display: flex; gap: .5rem; }
+.form-linha input {
+  flex: 1 1 auto; min-width: 0; min-height: 48px; font: inherit; padding: .5rem .75rem;
+  border: 2px solid var(--line); border-radius: 10px; background: var(--surface); color: var(--ink);
+}
+.form-linha input:focus-visible { border-color: var(--focus); }
+.por-voz { margin-top: 1rem; }
+.gravando #btn-perguntar { background: var(--neg); border-color: var(--neg); color: var(--on-accent); animation: pulso 1.2s ease-in-out infinite; }
+@keyframes pulso { 50% { box-shadow: 0 0 0 8px color-mix(in srgb, var(--neg) 25%, transparent); } }
+.aviso-voz { font-weight: 700; color: var(--ink); }
+
+/* ---------------- Ajustes da voz ---------------- */
+.painel-voz { border: 2px solid var(--accent); }
+.ajustes-corpo { display: grid; gap: .75rem; }
+.velocidade { border: 1px solid var(--line); border-radius: 10px; padding: .5rem .75rem .75rem; margin: 0; display: flex; flex-wrap: wrap; gap: .25rem 1rem; }
+.velocidade legend { font-weight: 700; padding: 0 .25rem; }
+.velocidade label, .check { display: inline-flex; align-items: center; gap: .5rem; min-height: 44px; cursor: pointer; }
+.check { align-items: flex-start; flex-wrap: wrap; }
+.check input { margin-top: .35rem; }
+.check .bloco { flex-basis: 100%; }
+input[type="radio"], input[type="checkbox"] { width: 1.3rem; height: 1.3rem; accent-color: var(--accent); }
+.rotulo-campo { font-weight: 700; margin-bottom: -.4rem; }
+#sel-voz {
+  font: inherit; min-height: 48px; padding: .5rem; border-radius: 10px; max-width: 100%;
+  border: 2px solid var(--line); background: var(--surface); color: var(--ink);
+}
+
+/* ---------------- Barra de leitura em voz alta ---------------- */
+.barra-fala {
+  position: fixed; left: 50%; transform: translateX(-50%);
+  bottom: calc(1rem + var(--safe-b) + var(--nav-h)); z-index: 40;
+  width: min(720px, calc(100% - 1.5rem));
+  display: flex; align-items: center; justify-content: space-between; gap: .75rem; flex-wrap: wrap;
+  padding: .5rem .5rem .5rem 1rem; border-radius: 16px;
+  background: var(--ink); color: var(--bg); box-shadow: 0 6px 24px rgb(0 0 0 / .3);
+}
+.barra-fala-txt { display: inline-flex; align-items: center; gap: .6rem; margin: 0; font-weight: 700; min-width: 0; }
+.barra-fala-botoes { display: flex; gap: .35rem; }
+.botao-fala {
+  width: 52px; height: 52px; border-radius: 12px; cursor: pointer; display: grid; place-items: center;
+  background: var(--bg); color: var(--ink); border: 2px solid var(--bg);
+}
+.botao-fala svg { width: 24px; height: 24px; }
+.botao-fala.parar { background: transparent; color: var(--bg); }
+.barra-fala .botao-fala:focus-visible { outline-color: var(--bar-gen); }
+.onda { width: 12px; height: 12px; border-radius: 50%; background: var(--bar-gen); animation: pulsoOnda 1s ease-in-out infinite; flex: 0 0 auto; }
+@keyframes pulsoOnda { 50% { transform: scale(1.5); opacity: .6; } }
+.falando .rodape { padding-bottom: 6rem; }
+
+.rodape { color: var(--muted); font-size: .9rem; text-align: center; margin-top: 2rem; }
+.rodape p { margin: .25rem 0; }
+
+/* ---------------- Telas largas: aproveita o espaço ---------------- */
+@media (min-width: 860px) {
+  #tela-conta { display: grid; grid-template-columns: 1fr 1fr; gap: 0 1rem; align-items: start; }
+  #tela-conta > .tela-titulo, #tela-conta > .ident, #tela-conta > #btn-ouvir-conta, #tela-conta > .resumo { grid-column: 1 / -1; }
+  .perguntas { grid-template-columns: 1fr 1fr; }
+}
+
+/* ---------------- Telas estreitas ---------------- */
+@media (max-width: 640px) {
+  .resumo-grade { grid-template-columns: 1fr; }
+  .kpi { display: grid; grid-template-columns: auto 1fr; column-gap: .75rem; align-items: center; }
+  .kpi-icone { grid-row: span 2; }
+  .kpi-medidor, .kpi .sub { grid-column: 1 / -1; }
+  .ident-grade { grid-template-columns: 1fr; }
+  .perguntas { grid-template-columns: 1fr; }
+  .categorias { grid-template-columns: 1fr 1fr; }
+  .totais { grid-template-columns: 1fr; }
+  .topo-acoes .botao-icone span { font-size: .95rem; }
+}
+@media (max-width: 420px) {
+  .vivo-item .valor { font-size: 1.4rem; }
+  .valor-grade { grid-template-columns: 1fr; }
+  .form-linha { flex-direction: column; }
+  .botao-icone { padding: .5rem .65rem; gap: .35rem; }
+  .rotulo-longo { display: none; }
+  .rotulo-curto { display: inline; }
+  .barra-fala { padding-left: .75rem; }
+  .barra-fala-txt { flex-basis: 100%; }
+  .barra-fala-botoes { width: 100%; justify-content: space-between; }
+}
+
+/* Respeita quem pediu menos movimento */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { transition: none !important; animation: none !important; scroll-behavior: auto !important; }
+}
+
+/* Modo de cores forçadas (Windows Alto Contraste): mantém as marcas visíveis */
+@media (forced-colors: active) {
+  .seg, .amostra, .kpi-medidor > span { forced-color-adjust: none; }
+  .lendo { outline-color: Highlight !important; }
+}
+
+</style>
+</head>
+<body>
+  <a class="skip-link" href="#conteudo">Pular para o conteúdo</a>
+
+  <!-- Ícones reutilizados (referenciados com <use>) -->
+  <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+    <symbol id="i-sol" viewBox="0 0 24 24"><circle cx="12" cy="12" r="4" fill="currentColor"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3M4.9 4.9 7 7M17 17l2.1 2.1M4.9 19.1 7 17M17 7l2.1-2.1" stroke="currentColor" stroke-width="2" stroke-linecap="round" fill="none"/></symbol>
+    <symbol id="i-casa" viewBox="0 0 24 24"><path d="M3 11 12 4l9 7v9H3Z" fill="currentColor"/></symbol>
+    <symbol id="i-rede" viewBox="0 0 24 24"><path d="M13 2 4 14h7l-1 8 9-12h-7Z" fill="currentColor"/></symbol>
+    <symbol id="i-saldo" viewBox="0 0 24 24"><path d="M12 4v16M5 8h14M5 8l-3 7h6ZM19 8l-3 7h6Z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/></symbol>
+    <symbol id="i-som" viewBox="0 0 24 24"><path d="M3 10v4h4l5 4V6L7 10Z" fill="currentColor"/><path d="M16.5 8.5a5 5 0 0 1 0 7M19 6a8.5 8.5 0 0 1 0 12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></symbol>
+    <symbol id="i-conta" viewBox="0 0 24 24"><path d="M6 3h9l4 4v14H6Z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><path d="M9 11h7M9 15h7" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></symbol>
+    <symbol id="i-grafico" viewBox="0 0 24 24"><path d="M4 20V10M10 20V4M16 20v-8M22 20H2" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></symbol>
+    <symbol id="i-fluxo" viewBox="0 0 24 24"><path d="M4 7h11l-3-3M20 17H9l3 3" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+    <symbol id="i-chat" viewBox="0 0 24 24"><path d="M4 5h16v11H9l-5 4Z" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linejoin="round"/><path d="M8 10h8" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></symbol>
+    <symbol id="i-mic" viewBox="0 0 24 24"><rect x="9" y="3" width="6" height="11" rx="3" fill="currentColor"/><path d="M5 11a7 7 0 0 0 14 0M12 18v3M8 21h8" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></symbol>
+    <symbol id="i-ok" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" fill="currentColor"/><path d="m7 12 3.5 3.5L17 9" fill="none" stroke="var(--surface)" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+    <symbol id="i-alerta" viewBox="0 0 24 24"><path d="M12 2 1 21h22Z" fill="currentColor"/><path d="M12 9v5M12 17.5v.5" stroke="var(--surface)" stroke-width="2.4" stroke-linecap="round"/></symbol>
+  </svg>
+
+  <header class="topo">
+    <div class="marca">
+      <svg class="marca-icone" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="#i-sol"/></svg>
+      <h1>Casa Solar <span class="marca-sub">Conta de energia</span></h1>
+    </div>
+    <div class="topo-acoes" role="group" aria-label="Ajustes de leitura">
+      <button id="btn-texto" class="botao-icone" type="button" aria-pressed="false" aria-label="Texto maior">
+        <svg class="icone" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+          <path d="M3 19 8 6l5 13M4.8 15h6.4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          <path d="M17 9v8M13 13h8" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+        </svg>
+        <span class="rotulo-longo">Texto maior</span><span class="rotulo-curto" aria-hidden="true">Texto</span>
+      </button>
+      <button id="btn-tema" class="botao-icone" type="button" aria-pressed="false" aria-label="Alto contraste">
+        <svg class="icone" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+          <circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="2"/>
+          <path d="M12 3a9 9 0 0 1 0 18Z" fill="currentColor"/>
+        </svg>
+        <span class="rotulo-longo">Alto contraste</span><span class="rotulo-curto" aria-hidden="true">Contraste</span>
+      </button>
+      <button id="btn-painel-voz" class="botao-icone" type="button" aria-expanded="false" aria-controls="painel-voz">
+        <svg class="icone" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="#i-som"/></svg>
+        <span>Voz</span>
+      </button>
+    </div>
+  </header>
+
+  <!-- Ajustes da voz (abre pelo botão "Voz" do topo) -->
+  <section id="painel-voz" class="cartao painel-voz" aria-labelledby="tit-painel-voz" hidden>
+    <h2 id="tit-painel-voz">Ajustes da voz</h2>
+    <div class="ajustes-corpo">
+      <fieldset class="velocidade">
+        <legend>Velocidade da fala</legend>
+        <label><input type="radio" name="velocidade" value="0.7" /> Devagar</label>
+        <label><input type="radio" name="velocidade" value="0.9" /> Normal</label>
+        <label><input type="radio" name="velocidade" value="1.15" /> Rápida</label>
+      </fieldset>
+      <label for="sel-voz" class="rotulo-campo">Voz</label>
+      <select id="sel-voz"><option value="">Automática (escolhe a melhor disponível)</option></select>
+      <p class="sub" id="voz-status" role="status"></p>
+      <label class="check">
+        <input type="checkbox" id="chk-falar" />
+        Ler as respostas do assistente em voz alta automaticamente
+        <span class="sub bloco">Desmarque se você usa leitor de tela (TalkBack, VoiceOver, NVDA): as respostas serão enviadas a ele. Os botões "Ouvir" continuam funcionando.</span>
+      </label>
+      <div class="linha-botoes">
+        <button id="btn-testar-voz" class="botao secundario" type="button">Testar voz</button>
+        <button id="btn-fechar-voz" class="botao secundario" type="button">Fechar</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- Só aparece com MODO=demonstracao (configuração do servidor) -->
+  <p id="aviso-simulado" class="aviso-simulado" role="note" hidden>
+    <svg class="icone" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="#i-alerta"/></svg>
+    <span><strong>Modo demonstração:</strong> os números são simulados e não vêm do medidor da casa.</span>
+  </p>
+
+  <!-- Comunicação com o medidor (ESP32) -->
+  <p id="conexao" class="conexao aguardando">
+    <span class="conexao-ponto" aria-hidden="true"></span>
+    <span><strong id="conexao-estado">Verificando o medidor…</strong> <span id="conexao-detalhe"></span></span>
+  </p>
+  <p id="status-conexao" class="status-conexao" role="status" hidden></p>
+
+  <nav class="abas" aria-label="Telas do aplicativo">
+    <a href="#conta" class="aba" data-tela="conta" aria-current="page">
+      <svg class="icone" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="#i-conta"/></svg><span>Minha conta</span>
+    </a>
+    <a href="#historico" class="aba" data-tela="historico">
+      <svg class="icone" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="#i-grafico"/></svg><span>Histórico</span>
+    </a>
+    <a href="#detalhe" class="aba" data-tela="detalhe">
+      <svg class="icone" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="#i-fluxo"/></svg><span>Detalhes</span>
+    </a>
+    <a href="#assistente" class="aba" data-tela="assistente">
+      <svg class="icone" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="#i-chat"/></svg><span>Assistente</span>
+    </a>
+  </nav>
+
+  <div class="periodo-barra" id="periodo-barra">
+    <span class="periodo-rotulo" id="periodo-rotulo">Período:</span>
+    <div class="periodo" role="group" aria-labelledby="periodo-rotulo">
+      <button class="botao-periodo" data-periodo="month" aria-pressed="true" type="button">Este mês</button>
+      <button class="botao-periodo" data-periodo="day" aria-pressed="false" type="button">Hoje</button>
+    </div>
+  </div>
+
+  <main id="conteudo" tabindex="-1">
+
+    <!-- =================== TELA: MINHA CONTA =================== -->
+    <section id="tela-conta" class="tela" aria-labelledby="tit-conta">
+      <h2 id="tit-conta" class="tela-titulo" tabindex="-1">Minha conta</h2>
+
+      <!-- Identificação, como no topo de uma conta de luz -->
+      <article class="cartao ident" id="card-ident" aria-labelledby="tit-ident">
+        <div class="ident-topo">
+          <h3 id="tit-ident">Conta de energia</h3>
+          <p id="status-energia" class="status-energia neutro">
+            <svg class="icone" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="#i-ok"/></svg>
+            <span>Carregando…</span>
+          </p>
+        </div>
+        <dl class="ident-grade">
+          <div><dt>Unidade consumidora</dt><dd id="id-unidade">—</dd></div>
+          <div><dt>Referência</dt><dd id="id-referencia">—</dd></div>
+          <div><dt>Última leitura do medidor</dt><dd id="id-leitura">—</dd></div>
+          <div><dt>Origem dos dados</dt><dd id="id-origem">—</dd></div>
+          <div><dt>Próxima leitura da concessionária</dt><dd id="id-proxima">—</dd></div>
+        </dl>
+      </article>
+
+      <button id="btn-ouvir-conta" class="botao destaque largo" type="button">
+        <svg class="icone" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="#i-som"/></svg>
+        Ouvir minha conta
+      </button>
+
+      <!-- Resumo energético: os três números principais -->
+      <section class="resumo" aria-labelledby="tit-resumo">
+        <h3 id="tit-resumo" class="secao-titulo">Resumo energético</h3>
+        <div class="resumo-grade">
+          <article class="kpi gen" id="card-gerada">
+            <svg class="kpi-icone" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="#i-sol"/></svg>
+            <h4 class="kpi-rotulo">Energia gerada</h4>
+            <p class="kpi-valor"><span id="v-geracao">—</span> <span class="unidade">kWh</span></p>
+            <span class="kpi-medidor" aria-hidden="true"><span id="m-geracao"></span></span>
+            <p class="sub">pelas placas solares</p>
+          </article>
+          <article class="kpi use" id="card-consumida">
+            <svg class="kpi-icone" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="#i-casa"/></svg>
+            <h4 class="kpi-rotulo">Energia consumida</h4>
+            <p class="kpi-valor"><span id="v-consumo">—</span> <span class="unidade">kWh</span></p>
+            <span class="kpi-medidor" aria-hidden="true"><span id="m-consumo"></span></span>
+            <p class="sub">pela sua casa</p>
+          </article>
+          <article class="kpi saldo" id="card-saldo">
+            <svg class="kpi-icone" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="#i-saldo"/></svg>
+            <h4 class="kpi-rotulo">Saldo energético</h4>
+            <p class="kpi-valor" id="v-saldo">—</p>
+            <p class="sub" id="v-saldo-txt">gerada − consumida</p>
+          </article>
+        </div>
+        <p class="aviso-parcial" id="aviso-parcial" role="note" hidden></p>
+      </section>
+
+      <article class="cartao" id="card-atendimento" aria-labelledby="tit-atend">
+        <h3 id="tit-atend">De onde veio a energia da casa</h3>
+        <p class="destaque-frase" id="atend-frase">—</p>
+        <div id="comp-consumo"></div>
+        <p class="sub nota-calculo" id="nota-fluxo"></p>
+      </article>
+
+      <article class="cartao" id="card-valor" aria-labelledby="tit-valor">
+        <h3 id="tit-valor">Valor estimado</h3>
+        <div class="valor-grade">
+          <div><p class="sub">A pagar (estimativa)</p><p class="valor-grande" id="v-custo">—</p></div>
+          <div><p class="sub">Economia com o sol</p><p class="valor-grande pos-txt" id="v-economia">—</p></div>
+        </div>
+        <details class="mais">
+          <summary>Como esse valor é calculado?</summary>
+          <p id="valor-explica">—</p>
+        </details>
+      </article>
+
+      <article class="cartao" aria-labelledby="tit-vivo">
+        <h3 id="tit-vivo">Agora, ao vivo</h3>
+        <div class="vivo-grade">
+          <div class="vivo-item">
+            <span class="rotulo">Gerando</span>
+            <span class="valor geracao" id="v-geracao-w">—</span>
+            <span class="unidade">W</span>
+          </div>
+          <div class="vivo-item">
+            <span class="rotulo">Consumindo</span>
+            <span class="valor consumo" id="v-consumo-w">—</span>
+            <span class="unidade">W</span>
+          </div>
+          <div class="vivo-item">
+            <span class="rotulo" id="v-saldo-w-rotulo">Saldo</span>
+            <span class="valor" id="v-saldo-w">—</span>
+            <span class="unidade">W</span>
+          </div>
+        </div>
+        <p class="sub" id="v-rede" hidden></p>
+        <p class="sub" id="v-atualizado">—</p>
+        <p class="vivo-historico" id="vivo-historico" hidden></p>
+        <button id="btn-ler-status" class="botao secundario largo" type="button">
+          <svg class="icone" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="#i-som"/></svg>
+          Ouvir como está agora
+        </button>
+      </article>
+
+      <article class="cartao" aria-labelledby="tit-atalhos">
+        <h3 id="tit-atalhos">Dúvidas sobre a conta?</h3>
+        <div class="atalhos">
+          <button class="pergunta" data-intencao="pagar" type="button">Quanto vou pagar?</button>
+          <button class="pergunta" data-intencao="c_maior" type="button">Estou consumindo mais do que gerando?</button>
+          <button class="pergunta" data-intencao="x_explica" type="button">Explique minha conta</button>
+        </div>
+        <a class="link-botao" href="#assistente">
+          <svg class="icone" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="#i-chat"/></svg>
+          Ver todas as perguntas no Assistente
+        </a>
+      </article>
+    </section>
+
+    <!-- =================== TELA: HISTÓRICO =================== -->
+    <section id="tela-historico" class="tela" aria-labelledby="tit-historico" hidden>
+      <h2 id="tit-historico" class="tela-titulo" tabindex="-1">Histórico energético</h2>
+
+      <article class="cartao" aria-labelledby="tit-hist">
+        <h3 id="tit-hist">Geração e consumo</h3>
+        <p class="sub" id="hist-sub">—</p>
+        <div class="totais">
+          <div class="total gen">
+            <svg class="icone total-icone" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="#i-sol"/></svg>
+            <div class="total-texto">
+              <span class="total-rotulo">Gerado pelo sol</span>
+              <span class="total-valor" id="tot-gen">—</span>
+              <span class="sub" id="tot-gen-pico"></span>
+            </div>
+          </div>
+          <div class="total use">
+            <svg class="icone total-icone" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="#i-casa"/></svg>
+            <div class="total-texto">
+              <span class="total-rotulo">Consumido pela casa</span>
+              <span class="total-valor" id="tot-use">—</span>
+              <span class="sub" id="tot-use-pico"></span>
+            </div>
+          </div>
+        </div>
+        <div id="graf-periodo" class="grafico" tabindex="0" role="img" aria-label="Gráfico de geração e consumo."></div>
+        <p id="leitura-periodo" class="grafico-leitura" aria-live="polite"></p>
+        <details class="tabela-alt">
+          <summary>Ver os mesmos dados em tabela</summary>
+          <div class="tabela-rolagem">
+            <table id="tabela-periodo">
+              <caption class="sr-only">Geração, consumo e saldo por período</caption>
+              <thead><tr><th scope="col">Período</th><th scope="col">Gerado (kWh)</th><th scope="col">Consumido (kWh)</th><th scope="col">Saldo (kWh)</th></tr></thead>
+              <tbody></tbody>
+            </table>
+          </div>
+        </details>
+      </article>
+
+      <article class="cartao" aria-labelledby="tit-saldo-evo">
+        <h3 id="tit-saldo-evo">Evolução do saldo</h3>
+        <p class="sub">Saldo acumulado (gerado − consumido) desde o início do período. Acima da linha: sobrou energia; abaixo: faltou e veio da rede.</p>
+        <div id="graf-saldo" class="grafico" tabindex="0" role="img" aria-label="Gráfico da evolução do saldo."></div>
+        <p id="leitura-saldo" class="grafico-leitura" aria-live="polite"></p>
+      </article>
+
+      <article class="cartao" aria-labelledby="tit-meses">
+        <h3 id="tit-meses">Histórico mensal</h3>
+        <p class="sub" id="meses-sub">Geração e consumo de cada mês com leituras.</p>
+        <div id="graf-meses" class="grafico" tabindex="0" role="img" aria-label="Gráfico do histórico mensal."></div>
+        <p id="leitura-meses" class="grafico-leitura" aria-live="polite"></p>
+        <details class="tabela-alt">
+          <summary>Ver os mesmos dados em tabela</summary>
+          <div class="tabela-rolagem">
+            <table id="tabela-meses">
+              <caption class="sr-only">Totais por mês</caption>
+              <thead><tr><th scope="col">Mês</th><th scope="col">Gerado (kWh)</th><th scope="col">Consumido (kWh)</th><th scope="col">Injetado (kWh)</th><th scope="col">Importado (kWh)</th><th scope="col">Dias com leitura</th></tr></thead>
+              <tbody></tbody>
+            </table>
+          </div>
+        </details>
+      </article>
+    </section>
+
+    <!-- =================== TELA: DETALHAMENTO =================== -->
+    <section id="tela-detalhe" class="tela" aria-labelledby="tit-detalhe" hidden>
+      <h2 id="tit-detalhe" class="tela-titulo" tabindex="-1">Detalhamento</h2>
+
+      <article class="cartao" aria-labelledby="tit-fluxo">
+        <h3 id="tit-fluxo">Fluxo de energia</h3>
+        <p class="sub" id="fluxo-sub">—</p>
+        <ol class="fluxos" id="fluxos"></ol>
+      </article>
+
+      <article class="cartao" aria-labelledby="tit-demo">
+        <h3 id="tit-demo">Demonstrativo de energia</h3>
+        <div class="tabela-rolagem">
+          <table class="demonstrativo" id="demonstrativo">
+            <caption class="sr-only">Demonstrativo de energia do período</caption>
+            <thead><tr><th scope="col">Item e origem do dado</th><th scope="col" class="num">kWh</th></tr></thead>
+            <tbody></tbody>
+          </table>
+        </div>
+        <ul class="legenda-origem">
+          <li><span class="origem medido">Medido</span> lido diretamente por um sensor.</li>
+          <li><span class="origem calculado">Calculado</span> obtido a partir das leituras dos sensores.</li>
+          <li><span class="origem indisponivel">Não disponível</span> só a concessionária registra.</li>
+        </ul>
+      </article>
+
+      <article class="cartao" aria-labelledby="tit-uso">
+        <h3 id="tit-uso">Uso da energia solar</h3>
+        <div id="comp-geracao"></div>
+        <div id="comp-consumo-det"></div>
+      </article>
+
+      <details class="cartao mais" id="como-obtido">
+        <summary>Como os valores são obtidos</summary>
+        <div id="como-obtido-texto"></div>
+      </details>
+    </section>
+
+    <!-- =================== TELA: ASSISTENTE =================== -->
+    <section id="tela-assistente" class="tela" aria-labelledby="tit-assistente" hidden>
+      <h2 id="tit-assistente" class="tela-titulo" tabindex="-1">Assistente</h2>
+      <p class="sub">Escolha um assunto e toque numa pergunta. As respostas usam os dados da sua casa.</p>
+
+      <div class="categorias" role="tablist" aria-label="Assuntos">
+        <button role="tab" id="aba-agora" aria-controls="painel-agora" aria-selected="true" type="button">
+          <svg class="icone" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="#i-rede"/></svg>Agora</button>
+        <button role="tab" id="aba-gen" aria-controls="painel-gen" aria-selected="false" tabindex="-1" type="button">
+          <svg class="icone" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="#i-sol"/></svg>Geração</button>
+        <button role="tab" id="aba-cons" aria-controls="painel-cons" aria-selected="false" tabindex="-1" type="button">
+          <svg class="icone" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="#i-casa"/></svg>Consumo</button>
+        <button role="tab" id="aba-eco" aria-controls="painel-eco" aria-selected="false" tabindex="-1" type="button">
+          <svg class="icone" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="#i-saldo"/></svg>Economia</button>
+        <button role="tab" id="aba-conta" aria-controls="painel-conta" aria-selected="false" tabindex="-1" type="button">
+          <svg class="icone" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="#i-conta"/></svg>Conta</button>
+      </div>
+      <div role="tabpanel" id="painel-agora" aria-labelledby="aba-agora" class="perguntas">
+        <button class="pergunta" data-intencao="agora_gerando" type="button">Quanto estou gerando agora?</button>
+        <button class="pergunta" data-intencao="agora_consumindo" type="button">Quanto minha residência está consumindo?</button>
+        <button class="pergunta" data-intencao="agora_rede" type="button">Estou importando ou exportando energia agora?</button>
+        <button class="pergunta" data-intencao="g_hoje" type="button">Qual foi minha geração hoje?</button>
+      </div>
+      <div role="tabpanel" id="painel-gen" aria-labelledby="aba-gen" class="perguntas" hidden>
+        <button class="pergunta" data-intencao="g_mes" type="button">Quanto meu sistema solar gerou este mês?</button>
+        <button class="pergunta" data-intencao="g_esperado" type="button">Minha geração está dentro do esperado?</button>
+        <button class="pergunta" data-intencao="g_pico" type="button">Qual foi o dia de maior geração?</button>
+        <button class="pergunta" data-intencao="g_aproveito" type="button">Estou aproveitando toda a energia produzida?</button>
+      </div>
+      <div role="tabpanel" id="painel-cons" aria-labelledby="aba-cons" class="perguntas" hidden>
+        <button class="pergunta" data-intencao="c_mes" type="button">Quanto minha residência consumiu?</button>
+        <button class="pergunta" data-intencao="c_pico" type="button">Qual foi meu maior consumo hoje?</button>
+        <button class="pergunta" data-intencao="c_vs_mes" type="button">Meu consumo aumentou em relação ao mês passado?</button>
+        <button class="pergunta" data-intencao="c_maior" type="button">Estou consumindo mais energia do que gerando?</button>
+      </div>
+      <div role="tabpanel" id="painel-eco" aria-labelledby="aba-eco" class="perguntas" hidden>
+        <button class="pergunta" data-intencao="e_economia" type="button">Quanto estou economizando com energia solar?</button>
+        <button class="pergunta" data-intencao="e_comprando" type="button">Quanto de energia estou comprando da concessionária?</button>
+        <button class="pergunta" data-intencao="e_exportando" type="button">Quanto estou exportando para a rede?</button>
+        <button class="pergunta" data-intencao="e_creditos" type="button">Estou acumulando créditos energéticos?</button>
+        <button class="pergunta" data-intencao="e_reduzir" type="button">Como posso reduzir meu consumo?</button>
+      </div>
+      <div role="tabpanel" id="painel-conta" aria-labelledby="aba-conta" class="perguntas" hidden>
+        <button class="pergunta" data-intencao="x_explica" type="button">Explique minha conta de energia.</button>
+        <button class="pergunta" data-intencao="x_injetada" type="button">O que significa energia injetada na rede?</button>
+        <button class="pergunta" data-intencao="x_compensada" type="button">Qual a diferença entre energia gerada e compensada?</button>
+        <button class="pergunta" data-intencao="x_saldo" type="button">Como interpretar meu saldo energético?</button>
+      </div>
+
+      <div class="conversa-barra">
+        <h3 class="secao-titulo">Conversa</h3>
+        <div class="linha-botoes">
+          <button id="btn-repetir" class="botao secundario pequeno" type="button" disabled>Repetir resposta</button>
+          <button id="btn-parar-audio" class="botao secundario pequeno" type="button">Parar áudio</button>
+          <button id="btn-limpar" class="botao secundario pequeno" type="button">Limpar</button>
+        </div>
+      </div>
+      <div id="conversa" class="conversa" role="log" aria-label="Conversa com o assistente" aria-live="off">
+        <p class="conversa-vazia" id="conversa-vazia">As respostas aparecem aqui.</p>
+      </div>
+
+      <details class="cartao mais" id="digitar-falar">
+        <summary>Prefere digitar ou falar a pergunta?</summary>
+        <form id="form-pergunta" class="form-pergunta">
+          <label for="campo-pergunta">Sua pergunta</label>
+          <div class="form-linha">
+            <input id="campo-pergunta" type="text" autocomplete="off" enterkeyhint="send"
+                   placeholder="Ex.: quanto gerei hoje?" />
+            <button class="botao" type="submit">Perguntar</button>
+          </div>
+        </form>
+        <div id="por-voz" class="por-voz">
+          <button id="btn-perguntar" class="botao secundario largo" type="button" aria-pressed="false">
+            <svg class="icone" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="#i-mic"/></svg>
+            <span id="btn-perguntar-txt">Perguntar falando</span>
+          </button>
+          <p class="sub aviso-voz" id="voz-aviso" role="status" hidden></p>
+        </div>
+      </details>
+    </section>
+  </main>
+
+  <!-- Controles de leitura em voz alta: aparecem enquanto o app fala -->
+  <div id="barra-fala" class="barra-fala" role="region" aria-label="Leitura em voz alta" hidden>
+    <p class="barra-fala-txt"><span class="onda" aria-hidden="true"></span><span id="barra-fala-titulo">Lendo em voz alta…</span></p>
+    <div class="barra-fala-botoes">
+      <button id="btn-anterior" class="botao-fala" type="button" aria-label="Voltar para a seção anterior">
+        <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M6 5v14M19 5 9 12l10 7Z" fill="currentColor" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg>
+      </button>
+      <button id="btn-pausa" class="botao-fala" type="button" aria-label="Pausar">
+        <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path id="ico-pausa" d="M7 5h3v14H7zM14 5h3v14h-3z" fill="currentColor"/></svg>
+      </button>
+      <button id="btn-proximo" class="botao-fala" type="button" aria-label="Avançar para a próxima seção">
+        <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M18 5v14M5 5l10 7-10 7Z" fill="currentColor" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg>
+      </button>
+      <button id="btn-parar" class="botao-fala parar" type="button" aria-label="Parar a leitura">
+        <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><rect x="6" y="6" width="12" height="12" rx="2" fill="currentColor"/></svg>
+      </button>
+    </div>
+  </div>
+
+  <!-- Região viva para anúncios ao leitor de tela -->
+  <div id="anuncio" class="sr-only" aria-live="polite" role="status"></div>
+
+  <footer class="rodape">
+    <p>Protótipo de extensão universitária • <span id="fonte-dados">—</span></p>
+    <p>Atalho: tecla <kbd>Esc</kbd> para parar a leitura em voz alta.</p>
+  </footer>
+
+  <script>window.__USE_MOCK__ = true;</script>
+  <script>
+/* Utilitários compartilhados: formatação (tela e fala), preferências e
+ * anúncios ao leitor de tela. Tudo fica em window.CS para os outros módulos. */
+(() => {
+  "use strict";
+  const CS = (window.CS = window.CS || {});
+
+  CS.USE_MOCK = !!window.__USE_MOCK__;
+  CS.$ = (id) => document.getElementById(id);
+
+  // ---------- números na tela ----------
+  CS.nf = (n, d = 2) =>
+    Number(n).toLocaleString("pt-BR", { minimumFractionDigits: d, maximumFractionDigits: d });
+  CS.money = (n, moeda = "R$") => `${moeda} ${CS.nf(n, 2)}`;
+  // Energia: 3 casas abaixo de 1 kWh (0,040 kWh não vira "0,00").
+  CS.nfKwh = (n) => CS.nf(n, Math.abs(n) > 0 && Math.abs(n) < 1 ? 3 : 2);
+  CS.kwh = (n) => CS.nfKwh(n) + " kWh";
+  CS.semAcento = (s) => s.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
+
+  // ---------- números do jeito que se fala em português ----------
+  // Sem zeros à direita ("1,5" e não "1,50") e sem ponto de milhar
+  // ("1020" é lido "mil e vinte"; "1.020" pode virar "um ponto zero vinte").
+  const nfFala = (n, max) =>
+    Number(n).toLocaleString("pt-BR",
+      { minimumFractionDigits: 0, maximumFractionDigits: max, useGrouping: false });
+  // Em pt-BR, singular até menos de 2 ("1,5 quilowatt-hora").
+  const plural = (n, sing, plur) => (Math.abs(n) < 2 ? sing : plur);
+  CS.nfFala = nfFala;
+
+  CS.falaKwh = (n) => {
+    const a = Math.abs(n);
+    if (a === 0) return "zero quilowatt-hora";
+    if (a < 0.995) return `${nfFala(a * 1000, 0)} watts-hora`;
+    const casas = a >= 100 ? 0 : a >= 10 ? 1 : 2;
+    return `${nfFala(a, casas)} ${plural(a, "quilowatt-hora", "quilowatts-hora")}`;
+  };
+
+  CS.falaWatts = (n) => {
+    const a = Math.abs(n);
+    if (a >= 10000) return `${nfFala(a / 1000, 1)} quilowatts`;
+    const r = Math.round(a);
+    return `${r} ${r === 1 ? "watt" : "watts"}`;
+  };
+
+  CS.falaReais = (v) => {
+    const total = Math.round(Math.abs(v) * 100);
+    const reais = Math.floor(total / 100), cent = total % 100;
+    if (!reais && !cent) return "zero reais";
+    const partes = [];
+    if (reais) partes.push(`${reais} ${reais === 1 ? "real" : "reais"}`);
+    if (cent) partes.push(`${cent} ${cent === 1 ? "centavo" : "centavos"}`);
+    return partes.join(" e ");
+  };
+
+  CS.falaPct = (p) => `${Math.round(p)} por cento`;
+
+  // ---------- datas ----------
+  const MESES = ["janeiro", "fevereiro", "março", "abril", "maio", "junho", "julho",
+    "agosto", "setembro", "outubro", "novembro", "dezembro"];
+  CS.mesExtenso = (d = new Date()) => MESES[d.getMonth()];
+  CS.dataHoraBR = (ts) => {
+    const d = new Date(ts);
+    if (isNaN(d)) return "—";
+    return d.toLocaleDateString("pt-BR") + " às " +
+      d.toLocaleTimeString("pt-BR", { hour: "2-digit", minute: "2-digit" });
+  };
+  CS.dataBR = (iso) => {
+    const d = new Date(iso + (iso.length === 10 ? "T12:00:00" : ""));
+    return isNaN(d) ? "—" : d.toLocaleDateString("pt-BR");
+  };
+  CS.minutosDesde = (ts) => {
+    const t = new Date(ts).getTime();
+    return isNaN(t) ? 0 : Math.floor((Date.now() - t) / 60000);
+  };
+
+  // ---------- preferências (salvas no aparelho) ----------
+  const PREF_PADRAO = { tema: "", texto: "", rate: 0.9, voz: "", falar: true };
+  CS.prefs = (() => {
+    try { return { ...PREF_PADRAO, ...JSON.parse(localStorage.getItem("prefs") || "{}") }; }
+    catch (_) { return { ...PREF_PADRAO }; }
+  })();
+  CS.salvarPrefs = () => {
+    try { localStorage.setItem("prefs", JSON.stringify(CS.prefs)); } catch (_) {}
+  };
+
+  // ---------- anúncios ao leitor de tela ----------
+  CS.anunciar = (texto) => {
+    const el = CS.$("anuncio");
+    if (!el) return;
+    // Limpa antes para que o mesmo texto repetido seja anunciado de novo.
+    el.textContent = "";
+    setTimeout(() => { el.textContent = texto; }, 60);
+  };
+
+  // Cria elemento (HTML ou SVG) com atributos e texto.
+  CS.h = (tag, attrs = {}, filhos = []) => {
+    const e = document.createElement(tag);
+    for (const k in attrs) {
+      if (k === "texto") e.textContent = attrs[k];
+      else if (k === "classe") e.className = attrs[k];
+      else e.setAttribute(k, attrs[k]);
+    }
+    for (const f of [].concat(filhos)) if (f) e.append(f);
+    return e;
+  };
+})();
+
+</script>
+  <script>
+/* Simulador em JS: usado SOMENTE na prévia autônoma (window.__USE_MOCK__),
+ * quando não há servidor. Espelha os cálculos de app/db.py para a tela se
+ * comportar igual. Com o servidor, os dados vêm de /api/* (reais ou do
+ * simulador do backend, sinalizado em /api/info). */
+(() => {
+  "use strict";
+  const CS = window.CS;
+  if (!CS.USE_MOCK) return;
+  const TARIFA = window.__TARIFA__ || 0.95;
+  const MESES = ["jan", "fev", "mar", "abr", "mai", "jun", "jul", "ago", "set", "out", "nov", "dez"];
+
+  const readings = []; // {t: Date, ac_w, dc_w, ac_wh, dc_wh}
+  const fatorSolar = (dt) => {
+    const h = dt.getHours() + dt.getMinutes() / 60;
+    if (h < 6 || h > 18) return 0;
+    return Math.sin((Math.PI * (h - 6)) / 12);
+  };
+  const amostra = (dt) => {
+    const dc = 1200 * fatorSolar(dt) * (0.75 + Math.random() * 0.25);
+    let ac = 150 + (Math.random() * 60 - 30);
+    if (Math.random() < 0.08) ac += 400 + Math.random() * 1800;
+    return [Math.max(ac, 0), Math.max(dc, 0)];
+  };
+  // semeia 35 dias horários
+  const agora = new Date();
+  const t0 = new Date(agora); t0.setHours(agora.getHours() - 24 * 35, 0, 0, 0);
+  for (let t = new Date(t0); t <= agora; t.setHours(t.getHours() + 1)) {
+    const [ac, dc] = amostra(t);
+    readings.push({ t: new Date(t), ac_w: ac, dc_w: dc, ac_wh: ac, dc_wh: dc });
+  }
+  setInterval(() => {
+    const dt = new Date();
+    const [ac, dc] = amostra(dt);
+    const f = 5 / 3600;
+    readings.push({ t: dt, ac_w: ac, dc_w: dc, ac_wh: ac * f, dc_wh: dc * f });
+  }, 5000);
+
+  const inicioPeriodo = (p) => {
+    const d = new Date();
+    if (p === "day") d.setHours(0, 0, 0, 0);
+    else { d.setDate(1); d.setHours(0, 0, 0, 0); }
+    return d;
+  };
+  const r2 = (n) => +n.toFixed(2), r3 = (n) => +n.toFixed(3);
+  const pct = (a, b) => (b > 0 ? Math.round((a / b) * 100) : null);
+
+  // Mesmo cálculo de fluxos do backend (_SQL_FLUXOS).
+  function fluxos(ini, fim) {
+    const f = { consumo: 0, geracao: 0, autoconsumo: 0, injetada: 0, importada: 0, n: 0, primeira: null, ultima: null };
+    for (const r of readings) {
+      if (r.t < ini || (fim && r.t >= fim)) continue;
+      const ac = r.ac_wh / 1000, dc = r.dc_wh / 1000;
+      f.consumo += ac; f.geracao += dc;
+      f.autoconsumo += Math.min(ac, dc);
+      f.injetada += Math.max(dc - ac, 0);
+      f.importada += Math.max(ac - dc, 0);
+      f.n++;
+      f.primeira = f.primeira || r.t.toISOString();
+      f.ultima = r.t.toISOString();
+    }
+    return f;
+  }
+  const resumo = (f) => ({ consumo_kwh: r2(f.consumo), geracao_kwh: r2(f.geracao),
+    importada_kwh: r2(f.importada), n_leituras: f.n, primeira_leitura: f.primeira });
+
+  CS.MockSource = {
+    async info() {
+      return { unidade: "Minha residência", modo: "demonstracao", simulado: true, tarifa: TARIFA, moeda: "R$",
+        proxima_leitura: null, limite_atraso_s: 60, limite_desconexao_s: 600 };
+    },
+    async current() {
+      const r = readings[readings.length - 1];
+      return { estado: "conectado", atual: true, idade_s: Math.round((Date.now() - r.t) / 1000), limite_atraso_s: 60,
+        leitura: { ts: r.t.toISOString(), dispositivo: "simulador", consumo_w: +r.ac_w.toFixed(1),
+          geracao_w: +r.dc_w.toFixed(1), saldo_w: +(r.dc_w - r.ac_w).toFixed(1),
+          rede_importando_w: null, rede_exportando_w: null, rede_medida: false } };
+    },
+    async status() {
+      const r = readings[readings.length - 1];
+      const idade = Math.round((Date.now() - r.t) / 1000);
+      return { modo: "demonstracao", estado: "conectado", ultima_transmissao: r.t.toISOString(), idade_s: idade,
+        limite_atraso_s: 60, limite_desconexao_s: 600, recebimento_habilitado: false,
+        dispositivos: [{ fonte: "simulador", ultima_medicao: r.t.toISOString(), ultima_recepcao: r.t.toISOString(),
+          leituras: readings.length, idade_s: idade, estado: "conectado" }] };
+    },
+    async bill(p) {
+      const ini = inicioPeriodo(p);
+      const f = fluxos(ini);
+      return {
+        periodo: p,
+        rotulo: p === "day" ? ini.toLocaleDateString("pt-BR")
+          : ini.toLocaleDateString("pt-BR", { month: "2-digit", year: "numeric" }),
+        inicio: ini.toISOString(),
+        consumo_kwh: r2(f.consumo), geracao_kwh: r2(f.geracao), saldo_kwh: r2(f.geracao - f.consumo),
+        autoconsumo_kwh: r2(f.autoconsumo), injetada_kwh: r2(f.injetada), importada_kwh: r2(f.importada),
+        atendimento_pct: pct(f.autoconsumo, f.consumo), aproveitamento_pct: pct(f.autoconsumo, f.geracao),
+        eficiencia_pct: f.geracao > 0 ? Math.round((f.consumo / f.geracao) * 100) : 0,
+        moeda: "R$", tarifa: TARIFA,
+        custo_consumo: r2(f.consumo * TARIFA), economia_solar: r2(f.geracao * TARIFA),
+        custo_liquido: r2(Math.max(f.consumo - f.geracao, 0) * TARIFA),
+        n_leituras: f.n, n_sem_consumo: 0, n_sem_geracao: 0, fluxo_origem: f.n ? "calculado" : "sem_dados",
+        primeira_leitura: f.primeira, ultima_leitura: f.ultima,
+      };
+    },
+    async history(p) {
+      const ini = inicioPeriodo(p);
+      const fmt = (d) => p === "day"
+        ? String(d.getHours()).padStart(2, "0") + "h"
+        : d.toLocaleDateString("pt-BR", { day: "2-digit", month: "2-digit" });
+      const buckets = new Map();
+      for (const r of readings) {
+        if (r.t < ini) continue;
+        const k = fmt(r.t);
+        const b = buckets.get(k) || { c: 0, g: 0, a: 0, i: 0, m: 0 };
+        const ac = r.ac_wh / 1000, dc = r.dc_wh / 1000;
+        b.c += ac; b.g += dc; b.a += Math.min(ac, dc); b.i += Math.max(dc - ac, 0); b.m += Math.max(ac - dc, 0);
+        buckets.set(k, b);
+      }
+      return [...buckets.entries()].map(([rotulo, v]) => ({
+        rotulo, consumo_kwh: r3(v.c), geracao_kwh: r3(v.g),
+        autoconsumo_kwh: r3(v.a), injetada_kwh: r3(v.i), importada_kwh: r3(v.m) }));
+    },
+    async months(n = 12) {
+      const porMes = new Map();
+      for (const r of readings) {
+        const k = r.t.getFullYear() + "-" + String(r.t.getMonth() + 1).padStart(2, "0");
+        const b = porMes.get(k) || { c: 0, g: 0, a: 0, i: 0, m: 0, dias: new Set() };
+        const ac = r.ac_wh / 1000, dc = r.dc_wh / 1000;
+        b.c += ac; b.g += dc; b.a += Math.min(ac, dc); b.i += Math.max(dc - ac, 0); b.m += Math.max(ac - dc, 0);
+        b.dias.add(r.t.toDateString());
+        porMes.set(k, b);
+      }
+      return [...porMes.entries()].sort().slice(-n).map(([mes, v]) => {
+        const [ano, m] = mes.split("-");
+        return { mes, rotulo: `${MESES[+m - 1]}/${ano.slice(2)}`,
+          consumo_kwh: r2(v.c), geracao_kwh: r2(v.g), autoconsumo_kwh: r2(v.a),
+          injetada_kwh: r2(v.i), importada_kwh: r2(v.m), dias_com_dados: v.dias.size };
+      });
+    },
+    async insights() {
+      const agora = new Date();
+      const hoje = new Date(agora); hoje.setHours(0, 0, 0, 0);
+      const ateAgora = agora - hoje;
+      const ant = [];
+      for (let d = 1; d <= 7; d++) {
+        const ini = new Date(hoje); ini.setDate(ini.getDate() - d);
+        const f = fluxos(ini, new Date(ini.getTime() + ateAgora));
+        if (f.n) ant.push(f.geracao);
+      }
+      const media = ant.length ? ant.reduce((a, b) => a + b, 0) / ant.length : null;
+      const iniMes = new Date(hoje); iniMes.setDate(1);
+      const iniAnt = new Date(iniMes); iniAnt.setMonth(iniAnt.getMonth() - 1);
+      const mesmo = new Date(agora); mesmo.setMonth(mesmo.getMonth() - 1);
+      const parcial = fluxos(iniAnt, mesmo < iniMes ? mesmo : iniMes);
+      const inteiro = fluxos(iniAnt, iniMes);
+      const cobre = !!parcial.primeira && new Date(parcial.primeira) <= new Date(iniAnt.getTime() + 864e5);
+      return {
+        geracao_hoje: { hoje_kwh: r2(fluxos(hoje).geracao),
+          media_7d_mesmo_horario_kwh: media === null ? null : r2(media), dias_base: ant.length },
+        mes_anterior: { rotulo: `${MESES[iniAnt.getMonth()]}/${iniAnt.getFullYear()}`,
+          mesmo_periodo: resumo(parcial), mes_inteiro: resumo(inteiro), dados_completos: cobre },
+      };
+    },
+  };
+})();
+
+</script>
+  <script>
+/* VOZ DE SAÍDA — dois motores:
+ *  - navegador: Web Speech (speechSynthesis), rápido e funciona offline;
+ *  - servidor:  /api/tts gera MP3 com voz neural pt-BR. Resolve o PC
+ *    (principalmente Linux), onde o navegador costuma não ter voz em
+ *    português ou só tem a voz online do Google, que falha em silêncio.
+ * No modo automático, usa o navegador se houver voz pt instalada no
+ * aparelho; senão, o servidor. Se um motor falhar, tenta o outro.
+ *
+ * A fala é uma lista de ITENS (frases): {texto, el?, grupo?, titulo?}.
+ *  - el: elemento destacado enquanto a frase é lida (classe "lendo");
+ *  - grupo: seção à qual a frase pertence (avançar/voltar pula seções).
+ * Pausar guarda a posição; continuar retoma da frase onde parou — funciona
+ * igual nos dois motores (o pause() nativo do Chrome não é confiável). */
+(() => {
+  "use strict";
+  const CS = window.CS, { $, prefs } = CS;
+
+  const temNavegador = "speechSynthesis" in window;
+  let temServidor = false;       // confirmado em /api/tts/vozes
+  let vozesServidor = {};
+  let navegadorFalhou = false;   // falhou nesta sessão -> usa o servidor
+  let geracao = 0;               // invalida callbacks de falas canceladas
+  let vozes = [];
+  const audio = new Audio();
+  audio.preload = "auto";
+  let blobsAtivos = [];
+
+  // Sessão atual de fala
+  let itens = [], pos = 0, estado = "parado", elAtivo = null;
+  let ultimaSessao = null;       // para "repetir"
+  const ouvintes = new Set();    // avisados quando o estado muda
+
+  // ---------- vozes ----------
+  function carregarVozes() {
+    if (!temNavegador) return;
+    vozes = speechSynthesis.getVoices();
+    preencherSeletorVozes();
+  }
+
+  // Pontua vozes: pt-BR primeiro; vozes "naturais/neurais" soam bem melhor.
+  function pontuar(v) {
+    let p = 0;
+    if (/^pt[-_]br$/i.test(v.lang)) p += 10;
+    else if (/^pt([-_]|$)/i.test(v.lang)) p += 5;
+    else if (/portug/i.test(v.name)) p += 4;
+    else return -1;
+    if (/natural|neural|online|premium|enhanced|aprimorad/i.test(v.name)) p += 3;
+    if (v.localService) p += 2;  // voz instalada: não depende de internet
+    if (/luciana|francisca|thalita|felipe|antonio|maria|daniel/i.test(v.name)) p += 1;
+    return p;
+  }
+  const vozesPt = () =>
+    vozes.map((v) => [v, pontuar(v)]).filter(([, p]) => p >= 0)
+      .sort((a, b) => b[1] - a[1]).map(([v]) => v);
+
+  function vozNavegador() {
+    if (prefs.voz && !prefs.voz.startsWith("srv:")) {
+      const v = vozes.find((x) => x.voiceURI === prefs.voz);
+      if (v) return v;
+    }
+    return vozesPt()[0] || null;
+  }
+
+  // Qual motor usar agora.
+  function motor() {
+    if (prefs.voz.startsWith("srv:") && temServidor) return "servidor";
+    if (prefs.voz && !prefs.voz.startsWith("srv:") && temNavegador) return "navegador";
+    if (!temNavegador) return temServidor ? "servidor" : null;
+    if (!temServidor) return "navegador";
+    if (navegadorFalhou) return "servidor";
+    const v = vozesPt()[0];
+    // Só confia no navegador se houver voz pt instalada no aparelho.
+    return v && v.localService ? "navegador" : "servidor";
+  }
+
+  function preencherSeletorVozes() {
+    const sel = $("sel-voz");
+    if (!sel) return;
+    sel.length = 1; // mantém "Automática"
+    [...sel.querySelectorAll("optgroup")].forEach((g) => g.remove());
+    const grupo = (rotulo, lista) => {
+      if (!lista.length) return;
+      const g = document.createElement("optgroup");
+      g.label = rotulo;
+      for (const [valor, texto] of lista) {
+        const o = document.createElement("option");
+        o.value = valor; o.textContent = texto;
+        g.appendChild(o);
+      }
+      sel.appendChild(g);
+    };
+    grupo("Vozes do servidor (alta qualidade, precisa de internet)",
+      Object.entries(vozesServidor).map(([id, nome]) => ["srv:" + id, nome]));
+    grupo("Vozes deste aparelho",
+      vozesPt().map((v) => [v.voiceURI, `${v.name} (${v.lang})${v.localService ? "" : " — online"}`]));
+    sel.value = [...sel.options].some((o) => o.value === prefs.voz) ? prefs.voz : "";
+  }
+
+  async function carregarServidor() {
+    if (CS.USE_MOCK) return;
+    try {
+      const r = await fetch("api/tts/vozes", { cache: "no-store" });
+      const d = await r.json();
+      temServidor = !!d.disponivel;
+      vozesServidor = temServidor ? d.vozes : {};
+    } catch (_) { temServidor = false; }
+    preencherSeletorVozes();
+    atualizarStatusVoz();
+    // Só desativa os ajustes depois de saber se a voz do servidor existe.
+    const nenhuma = !temNavegador && !temServidor;
+    for (const id of ["chk-falar", "btn-testar-voz"]) if ($(id)) $(id).disabled = nenhuma;
+  }
+
+  // Texto curto nos ajustes dizendo qual voz está em uso.
+  function atualizarStatusVoz() {
+    const el = $("voz-status");
+    if (!el) return;
+    const m = motor();
+    el.textContent = !m ? "Nenhuma voz disponível neste aparelho."
+      : m === "servidor" ? "Usando a voz do servidor (alta qualidade)."
+      : `Usando a voz do aparelho: ${vozNavegador()?.name || "padrão"}.`;
+  }
+
+  // ---------- estado e destaque ----------
+  function mudarEstado(novo) {
+    estado = novo;
+    document.body.classList.toggle("falando", novo !== "parado");
+    ouvintes.forEach((fn) => fn(novo, itens[pos]));
+  }
+
+  function destacar(i) {
+    const el = i >= 0 ? itens[i]?.el : null;
+    if (elAtivo && elAtivo !== el) elAtivo.classList.remove("lendo");
+    elAtivo = el || null;
+    if (el) {
+      el.classList.add("lendo");
+      if (itens[i].rolar) {
+        const r = el.getBoundingClientRect();
+        if (r.top < 60 || r.bottom > window.innerHeight - 100) {
+          const suave = !matchMedia("(prefers-reduced-motion: reduce)").matches;
+          el.scrollIntoView({ block: "center", behavior: suave ? "smooth" : "auto" });
+        }
+      }
+    }
+  }
+
+  function aoIniciarItem(minha, i) {
+    if (minha !== geracao) return;
+    pos = i;
+    if (estado !== "falando") mudarEstado("falando");
+    destacar(i);
+    ouvintes.forEach((fn) => fn(estado, itens[i]));
+  }
+
+  function aoTerminar(minha) {
+    if (minha !== geracao) return;
+    destacar(-1);
+    pos = 0;
+    mudarEstado("parado");
+  }
+
+  // ---------- motor: navegador ----------
+  function falarNavegador(minha, inicio, aoFalhar) {
+    speechSynthesis.cancel();
+    const voz = vozNavegador();
+    let comecou = false;
+    // Voz que não começa em 3 s (comum na voz online do Google no PC) = falha.
+    const vigia = aoFalhar && setTimeout(() => {
+      if (!comecou && minha === geracao) { speechSynthesis.cancel(); aoFalhar(); }
+    }, 3000);
+
+    for (let i = inicio; i < itens.length; i++) {
+      const u = new SpeechSynthesisUtterance(itens[i].texto);
+      u.lang = voz ? voz.lang : "pt-BR";
+      if (voz) u.voice = voz;
+      u.rate = prefs.rate;
+      u.onstart = () => { comecou = true; aoIniciarItem(minha, i); };
+      u.onerror = (e) => {
+        if (minha !== geracao || e.error === "interrupted" || e.error === "canceled") return;
+        clearTimeout(vigia);
+        speechSynthesis.cancel();
+        if (aoFalhar) aoFalhar(); else aoTerminar(minha);
+      };
+      if (i === itens.length - 1) u.onend = () => { clearTimeout(vigia); aoTerminar(minha); };
+      speechSynthesis.speak(u);
+    }
+    // Chrome às vezes fica "pausado" após cancel(); garante que retome.
+    if (speechSynthesis.paused) speechSynthesis.resume();
+  }
+
+  // ---------- motor: servidor ----------
+  function urlTTS(frase) {
+    const voz = prefs.voz.startsWith("srv:") ? prefs.voz.slice(4) : "";
+    return "api/tts?" + new URLSearchParams({ texto: frase, voz, velocidade: String(prefs.rate) });
+  }
+
+  async function falarServidor(minha, inicio, aoFalhar) {
+    liberarBlobs();
+    // Pede as frases em paralelo e toca em sequência: enquanto uma toca,
+    // as próximas já estão chegando.
+    const pedidos = itens.slice(inicio).map((it) =>
+      fetch(urlTTS(it.texto)).then((r) => { if (!r.ok) throw new Error("HTTP " + r.status); return r.blob(); }));
+    pedidos.forEach((p) => p.catch(() => {})); // evita aviso de promessa não tratada
+    try {
+      for (let k = 0; k < pedidos.length; k++) {
+        const blob = await pedidos[k];
+        if (minha !== geracao) return;
+        const url = URL.createObjectURL(blob);
+        blobsAtivos.push(url);
+        audio.src = url;
+        aoIniciarItem(minha, inicio + k);
+        await audio.play();
+        await new Promise((ok, erro) => {
+          audio.onended = ok;
+          audio.onerror = erro;
+          audio.onpause = () => { if (minha !== geracao) ok(); };
+        });
+        if (minha !== geracao) return;
+      }
+      aoTerminar(minha);
+    } catch (e) {
+      if (minha !== geracao) return;
+      console.warn("Voz do servidor falhou:", e);
+      if (aoFalhar) aoFalhar(); else aoTerminar(minha);
+    } finally {
+      liberarBlobs();
+    }
+  }
+
+  function liberarBlobs() {
+    blobsAtivos.forEach((u) => URL.revokeObjectURL(u));
+    blobsAtivos = [];
+  }
+
+  function pararMotores() {
+    if (temNavegador) speechSynthesis.cancel();
+    audio.pause();
+    liberarBlobs();
+  }
+
+  // Toca os itens a partir de "inicio", com o motor escolhido.
+  function tocarDe(inicio) {
+    if (temNavegador && !vozes.length) carregarVozes();
+    const m = motor();
+    if (!m || !itens.length) return false;
+    const minha = ++geracao;
+    pararMotores();
+    pos = inicio;
+    mudarEstado("falando");
+    destacar(inicio);
+
+    if (m === "navegador") {
+      // Se a voz do navegador falhar, tenta a do servidor.
+      const planoB = temServidor && !prefs.voz ? () => {
+        navegadorFalhou = true;
+        atualizarStatusVoz();
+        if (minha === geracao) falarServidor(minha, pos, null);
+      } : null;
+      falarNavegador(minha, inicio, planoB);
+    } else {
+      // Se o servidor falhar (sem internet, por ex.), tenta o navegador.
+      const planoB = temNavegador ? () => {
+        if (minha === geracao) falarNavegador(minha, pos, null);
+      } : () => { const t = itens.slice(pos).map((x) => x.texto).join(" "); aoTerminar(minha); CS.anunciar(t); };
+      falarServidor(minha, inicio, planoB);
+    }
+    return true;
+  }
+
+  // ---------- API pública ----------
+  // Frases curtas: evita o corte de falas longas do Chrome e permite
+  // destacar a frase que está sendo lida.
+  function dividir(texto) {
+    // Só quebra em pontuação seguida de espaço/fim (não em "1.020" ou "2,5").
+    return texto.split(/(?<=[.!?])\s+/).map((s) => s.trim()).filter(Boolean);
+  }
+
+  // Exibe o texto em <span class="frase"> (uma por frase) dentro de "destino".
+  function renderFrases(destino, frases) {
+    destino.textContent = "";
+    return frases.map((f, i) => {
+      const s = CS.h("span", { classe: "frase", texto: (i ? " " : "") + f });
+      destino.appendChild(s);
+      return s;
+    });
+  }
+
+  // Toca uma lista de itens. guardar=false: confirmações ("vou falar mais
+  // devagar") não substituem o que o comando "repetir" deve repetir.
+  function tocar(lista, { guardar = true, inicio = 0 } = {}) {
+    itens = lista;
+    if (guardar) ultimaSessao = lista;
+    return tocarDe(inicio);
+  }
+
+  // Atalho: fala um texto; se "destino" for dado, mostra-o com destaque por frase.
+  function falar(texto, destino, guardar = true) {
+    const frases = dividir(texto);
+    const spans = destino ? renderFrases(destino, frases) : [];
+    return tocar(frases.map((t, i) => ({ texto: t, el: spans[i], grupo: i })), { guardar });
+  }
+
+  function parar() {
+    geracao++;
+    pararMotores();
+    destacar(-1);
+    pos = 0;
+    mudarEstado("parado");
+  }
+
+  function pausar() {
+    if (estado !== "falando") return;
+    geracao++;
+    pararMotores();
+    mudarEstado("pausado");
+  }
+
+  function continuar() {
+    if (estado === "pausado") tocarDe(pos);
+  }
+
+  const alternarPausa = () => (estado === "falando" ? pausar() : continuar());
+
+  // Avança/volta para o começo da próxima/anterior seção (grupo).
+  function proximo() {
+    if (estado === "parado") return;
+    const g = itens[pos]?.grupo;
+    const i = itens.findIndex((it, k) => k > pos && it.grupo !== g);
+    if (i < 0) return parar();
+    tocarDe(i);
+  }
+  function anterior() {
+    if (estado === "parado") return;
+    const g = itens[pos]?.grupo;
+    const inicioAtual = itens.findIndex((it) => it.grupo === g);
+    let alvo = inicioAtual;
+    if (pos === inicioAtual && inicioAtual > 0) {
+      const gAnt = itens[inicioAtual - 1].grupo;
+      alvo = itens.findIndex((it) => it.grupo === gAnt);
+    }
+    tocarDe(Math.max(0, alvo));
+  }
+
+  function repetir() {
+    if (!ultimaSessao) return false;
+    return tocar(ultimaSessao);
+  }
+
+  // iOS/Safari só libera a fala se a primeira vez ocorrer num toque do
+  // usuário; depois disso, falas após um "await" também funcionam.
+  function desbloquear() {
+    if (!temNavegador || desbloquear.feito) return;
+    desbloquear.feito = true;
+    const u = new SpeechSynthesisUtterance(" ");
+    u.volume = 0;
+    speechSynthesis.speak(u);
+  }
+
+  if (temNavegador) {
+    carregarVozes();
+    // A lista de vozes costuma chegar só depois deste evento (Chrome).
+    speechSynthesis.addEventListener("voiceschanged", () => { carregarVozes(); atualizarStatusVoz(); });
+  }
+
+  CS.Voz = {
+    tocar, falar, parar, pausar, continuar, alternarPausa, proximo, anterior, repetir,
+    dividir, renderFrases, desbloquear, carregarServidor, atualizarStatusVoz,
+    aoMudar: (fn) => ouvintes.add(fn),
+    get estado() { return estado; },
+    get temRepeticao() { return !!ultimaSessao; },
+    get suportada() { return temNavegador || temServidor; },
+  };
+})();
+
+</script>
+  <script>
+/* Gráficos em SVG/HTML, sem bibliotecas. Cores por função (tokens CSS):
+ *   âmbar = geração solar · azul = consumo · verde = sobra · vermelho = rede.
+ * Identidade nunca só pela cor: nomes das séries escritos no gráfico,
+ * posição (geração sobe, consumo desce) e tabela equivalente na página.
+ * Interação: tocar/passar o mouse/setas do teclado mostram os valores. */
+(() => {
+  "use strict";
+  const CS = window.CS, { nf } = CS;
+  const SVG_NS = "http://www.w3.org/2000/svg";
+
+  function el(tag, attrs, pai) {
+    const e = document.createElementNS(SVG_NS, tag);
+    for (const k in attrs) e.setAttribute(k, attrs[k]);
+    if (pai) pai.appendChild(e);
+    return e;
+  }
+
+  // Topo "redondo" da escala (1, 2, 2,5, 5 × 10^n) para marcas legíveis.
+  function escalaBonita(v) {
+    if (v <= 0) return 0.1;
+    const p = Math.pow(10, Math.floor(Math.log10(v)));
+    for (const m of [1, 2, 2.5, 5, 10]) if (m * p >= v) return m * p;
+    return 10 * p;
+  }
+
+  // Barra com cantos arredondados só na ponta (longe da linha de base).
+  function caminhoBarra(x, base, w, alt, paraCima) {
+    const r = Math.min(4, w / 2, alt);
+    const y = paraCima ? base - alt : base + alt;
+    const s = paraCima ? 1 : -1;
+    return `M${x},${base} V${y + s * r} Q${x},${y} ${x + r},${y} H${x + w - r} ` +
+      `Q${x + w},${y} ${x + w},${y + s * r} V${base} Z`;
+  }
+
+  function vazio(cont, msg) {
+    cont.textContent = "";
+    cont.appendChild(CS.h("p", { classe: "grafico-vazio", texto: msg || "Ainda não há leituras para este período." }));
+  }
+
+  // ---------- interação comum (ponteiro + teclado) ----------
+  function interativo(cont) {
+    if (cont._interativo) return;
+    cont._interativo = true;
+    const indice = (ev) => {
+      const g = cont._geo, r = cont.getBoundingClientRect();
+      if (!g) return -1;
+      const i = Math.floor((ev.clientX - r.left - g.esq) / g.banda);
+      return i >= 0 && i < g.n ? i : -1;
+    };
+    const selecionar = (i) => {
+      const st = cont._estado;
+      if (!st) return;
+      st.sel = Math.max(0, Math.min(st.slots.length - 1, i));
+      st.desenhar();
+      if (st.leitura && st.textoSlot) st.leitura.textContent = st.textoSlot(st.slots[st.sel], st.sel);
+    };
+    cont.addEventListener("pointermove", (ev) => {
+      if (ev.pointerType !== "mouse") return;
+      const i = indice(ev);
+      if (i >= 0 && i !== cont._estado?.sel) selecionar(i);
+    });
+    cont.addEventListener("pointerdown", (ev) => { const i = indice(ev); if (i >= 0) selecionar(i); });
+    cont.addEventListener("keydown", (ev) => {
+      const st = cont._estado;
+      if (!st) return;
+      const ultimo = st.slots.length - 1;
+      const base = st.sel >= 0 ? st.sel : Math.max(0, Math.min(st.atual ?? ultimo, ultimo));
+      const novo = { ArrowRight: base + 1, ArrowLeft: base - 1, Home: 0, End: ultimo }[ev.key];
+      if (novo === undefined) return;
+      ev.preventDefault();
+      selecionar(st.sel < 0 && ev.key.startsWith("Arrow") ? base : novo);
+    });
+    cont._selecionar = selecionar;
+  }
+
+  // Redesenha quando a largura muda (girar o celular, abrir a tela, etc.).
+  function acompanharLargura(cont) {
+    if (cont._largura !== undefined || !("ResizeObserver" in window)) return;
+    cont._largura = 0;
+    new ResizeObserver(() => {
+      const w = cont.clientWidth;
+      if (w && w !== cont._largura && cont._estado) { cont._largura = w; cont._estado.desenhar(); }
+    }).observe(cont);
+  }
+
+  // ---------- barras espelhadas: geração sobe, consumo desce ----------
+  // cfg: { slots:[{rotulo, eixo, cima, baixo, futuro}], marcarEixo(i,n,banda),
+  //        nomeCima, nomeBaixo, classeCima, classeBaixo, atual, sel, altura,
+  //        leitura (elemento), textoSlot(slot,i), interativo }
+  function barras(cont, cfg) {
+    const temDados = cfg.slots.some((s) => (s.cima || 0) > 0 || (s.baixo || 0) > 0);
+    if (!temDados) { cont._estado = null; return vazio(cont, cfg.vazio); }
+    const st = (cont._estado = {
+      ...cfg, sel: cfg.sel ?? (cont._estado?.chave === cfg.chave ? cont._estado.sel : -1),
+      desenhar: () => desenharBarras(cont, st),
+    });
+    if (cfg.interativo !== false) interativo(cont);
+    acompanharLargura(cont);
+    st.desenhar();
+    if (st.sel >= 0 && st.leitura && st.textoSlot) st.leitura.textContent = st.textoSlot(st.slots[st.sel], st.sel);
+  }
+
+  function desenharBarras(cont, st) {
+    const slots = st.slots;
+    const W = Math.max(200, cont.clientWidth || 320);
+    const H = st.altura || 260;
+    const m = { esq: 40, dir: 6, topo: 26, base: 26, faixa: 22 }; // faixa = rótulos do eixo no meio
+    const plotW = W - m.esq - m.dir;
+    const meia = (H - m.topo - m.base - m.faixa) / 2;
+    const baseG = m.topo + meia, baseC = baseG + m.faixa;
+    const max = escalaBonita(Math.max(0, ...slots.map((s) => Math.max(s.cima || 0, s.baixo || 0))));
+    const n = slots.length, banda = plotW / n;
+    const bw = Math.max(2, Math.min(banda - 2, st.larguraMax || 18)); // 2px de respiro entre barras
+    const casas = max < 1 ? 2 : max < 10 ? 1 : 0;
+
+    const svg = el("svg", { width: W, height: H, viewBox: `0 0 ${W} ${H}`, "aria-hidden": "true", focusable: "false" });
+    for (const [y, v] of [[m.topo, max], [m.topo + meia / 2, max / 2], [baseC + meia / 2, max / 2], [baseC + meia, max]]) {
+      el("line", { x1: m.esq, x2: W - m.dir, y1: y, y2: y, class: "g-grade" }, svg);
+      el("text", { x: m.esq - 6, y: y + 4, class: "g-escala", "text-anchor": "end" }, svg).textContent = nf(v, casas);
+    }
+    el("line", { x1: m.esq, x2: W - m.dir, y1: baseG, y2: baseG, class: "g-base" }, svg);
+    el("line", { x1: m.esq, x2: W - m.dir, y1: baseC, y2: baseC, class: "g-base" }, svg);
+
+    const colX = (i) => m.esq + i * banda;
+    if (st.atual >= 0 && st.atual < n) {
+      el("rect", { x: colX(st.atual), y: m.topo, width: banda, height: H - m.topo - m.base, class: "g-agora" }, svg);
+    }
+    if (st.sel >= 0) {
+      el("rect", { x: colX(st.sel), y: m.topo - 4, width: banda, height: H - m.topo - m.base + 8, rx: 4, class: "g-sel" }, svg);
+    }
+    slots.forEach((s, i) => {
+      const x = colX(i) + (banda - bw) / 2;
+      if (s.cima > 0) el("path", { d: caminhoBarra(x, baseG, bw, Math.max(1, (s.cima / max) * meia), true), class: st.classeCima || "g-gen" }, svg);
+      if (s.baixo > 0) el("path", { d: caminhoBarra(x, baseC, bw, Math.max(1, (s.baixo / max) * meia), false), class: st.classeBaixo || "g-use" }, svg);
+    });
+    const marcar = st.marcarEixo || (() => true);
+    slots.forEach((s, i) => {
+      if (!marcar(i, n, banda)) return;
+      el("text", { x: colX(i) + banda / 2, y: baseG + m.faixa / 2 + 4, class: "g-eixo", "text-anchor": "middle" }, svg)
+        .textContent = s.eixo;
+    });
+    const rotuloSerie = (y, cls, txt) => {
+      el("rect", { x: m.esq, y: y - 10, width: 12, height: 12, rx: 3, class: cls }, svg);
+      el("text", { x: m.esq + 18, y, class: "g-serie" }, svg).textContent = txt;
+    };
+    rotuloSerie(m.topo - 10, st.classeCima || "g-gen", st.nomeCima || "▲ Gerado pelo sol (kWh)");
+    rotuloSerie(H - 6, st.classeBaixo || "g-use", st.nomeBaixo || "▼ Consumido pela casa (kWh)");
+
+    cont.textContent = "";
+    cont.appendChild(svg);
+    cont._geo = { esq: m.esq, banda, n };
+  }
+
+  // ---------- linha do saldo acumulado ----------
+  // cfg: { slots:[{rotulo, eixo, valor|null}], marcarEixo, atual, leitura, textoSlot }
+  function linha(cont, cfg) {
+    const pontos = cfg.slots.filter((s) => s.valor !== null && s.valor !== undefined);
+    if (!pontos.length) { cont._estado = null; return vazio(cont, cfg.vazio); }
+    const st = (cont._estado = {
+      ...cfg, sel: cont._estado?.chave === cfg.chave ? cont._estado.sel : -1,
+      desenhar: () => desenharLinha(cont, st),
+    });
+    interativo(cont);
+    acompanharLargura(cont);
+    st.desenhar();
+    if (st.sel >= 0 && st.leitura) st.leitura.textContent = st.textoSlot(st.slots[st.sel], st.sel);
+  }
+
+  function desenharLinha(cont, st) {
+    const slots = st.slots;
+    const W = Math.max(200, cont.clientWidth || 320);
+    const H = st.altura || 220;
+    const m = { esq: 44, dir: 8, topo: 14, base: 28 };
+    const plotW = W - m.esq - m.dir, plotH = H - m.topo - m.base;
+    const vals = slots.map((s) => s.valor).filter((v) => v !== null && v !== undefined);
+    const lim = escalaBonita(Math.max(0.1, ...vals.map(Math.abs)));
+    const y = (v) => m.topo + ((lim - v) / (2 * lim)) * plotH;  // escala simétrica: 0 no meio
+    const n = slots.length, banda = plotW / n;
+    const x = (i) => m.esq + i * banda + banda / 2;
+    const y0 = y(0);
+    const casas = lim < 1 ? 2 : lim < 10 ? 1 : 0;
+
+    const svg = el("svg", { width: W, height: H, viewBox: `0 0 ${W} ${H}`, "aria-hidden": "true", focusable: "false" });
+    const id = "c" + Math.random().toString(36).slice(2, 8);
+    const defs = el("defs", {}, svg);
+    el("rect", { x: 0, y: 0, width: W, height: y0 }, el("clipPath", { id: id + "p" }, defs));
+    el("rect", { x: 0, y: y0, width: W, height: H - y0 }, el("clipPath", { id: id + "n" }, defs));
+
+    for (const v of [lim, lim / 2, -lim / 2, -lim]) {
+      el("line", { x1: m.esq, x2: W - m.dir, y1: y(v), y2: y(v), class: "g-grade" }, svg);
+      el("text", { x: m.esq - 6, y: y(v) + 4, class: "g-escala", "text-anchor": "end" }, svg)
+        .textContent = (v > 0 ? "+" : "") + nf(v, casas);
+    }
+    el("text", { x: m.esq - 6, y: y0 + 4, class: "g-escala", "text-anchor": "end" }, svg).textContent = "0";
+
+    if (st.atual >= 0 && st.atual < n) {
+      el("rect", { x: m.esq + st.atual * banda, y: m.topo, width: banda, height: plotH, class: "g-agora" }, svg);
+    }
+
+    // Caminho da linha e da área até o zero (só pontos com dados)
+    const idx = slots.map((s, i) => (s.valor === null || s.valor === undefined ? -1 : i)).filter((i) => i >= 0);
+    const d = idx.map((i, k) => `${k ? "L" : "M"}${x(i)},${y(slots[i].valor)}`).join(" ");
+    const area = d + ` L${x(idx[idx.length - 1])},${y0} L${x(idx[0])},${y0} Z`;
+    for (const [clip, cls] of [["p", "pos"], ["n", "neg"]]) {
+      const g = el("g", { "clip-path": `url(#${id}${clip})` }, svg);
+      el("path", { d: area, class: "g-area-" + cls }, g);
+      el("path", { d, class: "g-linha-" + cls }, g);
+    }
+    el("line", { x1: m.esq, x2: W - m.dir, y1: y0, y2: y0, class: "g-base" }, svg);
+
+    // Rótulos de eixo e sentido (texto, não só cor)
+    const marcar = st.marcarEixo || (() => true);
+    slots.forEach((s, i) => {
+      if (marcar(i, n, banda)) el("text", { x: x(i), y: H - 8, class: "g-eixo", "text-anchor": "middle" }, svg).textContent = s.eixo;
+    });
+    el("text", { x: W - m.dir, y: m.topo + 12, class: "g-serie", "text-anchor": "end" }, svg).textContent = "▲ Sobrou energia";
+    el("text", { x: W - m.dir, y: H - m.base - 6, class: "g-serie", "text-anchor": "end" }, svg).textContent = "▼ Faltou (veio da rede)";
+
+    if (st.sel >= 0 && slots[st.sel] && slots[st.sel].valor !== null && slots[st.sel].valor !== undefined) {
+      const v = slots[st.sel].valor;
+      el("line", { x1: x(st.sel), x2: x(st.sel), y1: m.topo, y2: m.topo + plotH, class: "g-cruz" }, svg);
+      el("circle", { cx: x(st.sel), cy: y(v), r: 5, class: "g-ponto " + (v >= 0 ? "pos" : "neg") }, svg);
+    }
+    cont.textContent = "";
+    cont.appendChild(svg);
+    cont._geo = { esq: m.esq, banda, n };
+  }
+
+  // ---------- composição (barra empilhada horizontal + legenda) ----------
+  // partes: [{rotulo, valor, classe}] ; total = soma das partes
+  function composicao(partes, { titulo } = {}) {
+    const total = partes.reduce((a, p) => a + p.valor, 0);
+    const wrap = CS.h("div", { classe: "composicao" });
+    if (titulo) wrap.appendChild(CS.h("p", { classe: "composicao-titulo", texto: titulo }));
+    const barra = CS.h("div", { classe: "composicao-barra", "aria-hidden": "true" });
+    const lista = CS.h("ul", { classe: "composicao-legenda" });
+    for (const p of partes) {
+      const pct = total > 0 ? (p.valor / total) * 100 : 0;
+      if (pct > 0) {
+        const seg = CS.h("span", { classe: "seg " + p.classe });
+        seg.style.width = pct + "%";
+        barra.appendChild(seg);
+      }
+      lista.appendChild(CS.h("li", {}, [
+        CS.h("span", { classe: "amostra " + p.classe, "aria-hidden": "true" }),
+        CS.h("span", { texto: `${p.rotulo}: ${nf(p.valor)} kWh${total > 0 ? ` (${Math.round(pct)}%)` : ""}` }),
+      ]));
+    }
+    wrap.append(barra, lista);
+    return wrap;
+  }
+
+  // ---------- comparação simples (barras horizontais rotuladas) ----------
+  // linhas: [{rotulo, valor, classe, texto}]
+  function comparativo(linhas) {
+    const max = Math.max(0.001, ...linhas.map((l) => l.valor));
+    const wrap = CS.h("div", { classe: "comparativo" });
+    for (const l of linhas) {
+      const barra = CS.h("span", { classe: "comp-barra", "aria-hidden": "true" }, CS.h("span", { classe: "seg " + l.classe }));
+      barra.firstChild.style.width = (l.valor / max) * 100 + "%";
+      wrap.appendChild(CS.h("div", { classe: "comp-linha" }, [
+        CS.h("span", { classe: "comp-rotulo", texto: l.rotulo }),
+        barra,
+        CS.h("span", { classe: "comp-valor", texto: l.texto ?? nf(l.valor) + " kWh" }),
+      ]));
+    }
+    return wrap;
+  }
+
+  CS.Graficos = { barras, linha, composicao, comparativo, escalaBonita };
+})();
+
+</script>
+  <script>
+/* Casa Solar — conta de energia inteligente (PWA).
+ * Telas: Minha conta · Histórico · Detalhes · Assistente.
+ * Fontes de dados:
+ *   - Backend (/api/*): dados reais do ESP32 ou do simulador do servidor
+ *     (o servidor informa em /api/info se está simulando);
+ *   - MockSource (mock.js): só na prévia autônoma, sem servidor.
+ * Regra: nada de números inventados. O que é medido, calculado ou estimado
+ * é dito como tal, e o que não existe (ex.: créditos da concessionária)
+ * aparece como "não disponível". */
+(() => {
+  "use strict";
+  const CS = window.CS;
+  const { $, nf, money, kwh, falaKwh, falaReais, falaWatts, prefs, salvarPrefs, anunciar, h, Voz, Graficos } = CS;
+
+  // =====================================================================
+  //  DADOS
+  // =====================================================================
+  async function getJSON(url) {
+    const r = await fetch(url, { cache: "no-store" });
+    if (!r.ok) throw new Error("HTTP " + r.status);
+    return r.json();
+  }
+  const Backend = {
+    info: () => getJSON("api/info"),
+    current: () => getJSON("api/energy/current"),
+    status: () => getJSON("api/energy/status"),
+    bill: (p) => getJSON("api/bill?period=" + p),
+    history: (p) => getJSON("api/history?period=" + p),
+    months: (n = 12) => getJSON("api/months?n=" + n),
+    insights: () => getJSON("api/insights"),
+  };
+  const source = CS.USE_MOCK ? CS.MockSource : Backend;
+
+  const estado = { periodo: "month", tela: "conta" };
+
+  // Cache curto: evita pedir o mesmo dado várias vezes; se a rede falhar,
+  // continua mostrando o último valor recebido.
+  const cache = new Map();
+  async function obter(chave, ttl, fn) {
+    const c = cache.get(chave);
+    if (c && Date.now() - c.t < ttl) return c.valor;
+    try {
+      const valor = await fn();
+      cache.set(chave, { t: Date.now(), valor });
+      marcarConexao(true);
+      return valor;
+    } catch (e) {
+      console.error(e);
+      marcarConexao(false);
+      if (c) return c.valor;
+      throw e;
+    }
+  }
+  const dados = {
+    info: () => obter("info", 600000, () => source.info()),
+    current: () => obter("current", 4000, () => source.current()),
+    status: () => obter("status", 4000, () => source.status()),
+    bill: (p) => obter("bill:" + p, 20000, () => source.bill(p)),
+    history: (p) => obter("hist:" + p, 30000, () => source.history(p)),
+    months: () => obter("months", 120000, () => source.months(12)),
+    insights: () => obter("insights", 120000, () => source.insights()),
+  };
+
+  let falhas = 0;
+  function marcarConexao(ok) {
+    const el = $("status-conexao");
+    if (ok) {
+      if (falhas > 0) { el.hidden = true; anunciar("Conexão com o servidor restabelecida."); }
+      falhas = 0;
+      return;
+    }
+    falhas++;
+    if (falhas === 1) {
+      el.hidden = false;
+      el.textContent = "Sem conexão com o servidor. Mostrando os últimos dados recebidos; tentando de novo a cada poucos segundos.";
+    }
+  }
+
+  // ---------- textos de período ----------
+  const per = (p) => (p === "day"
+    ? { quando: "hoje", de: "de hoje", ate: "hoje, até agora" }
+    : { quando: "neste mês", de: "deste mês", ate: "neste mês, até agora" });
+  const semDados = (b) => !b || !b.n_leituras;
+  const tarifaFalada = (b) => `${falaReais(b.tarifa)} por quilowatt-hora`;
+
+  const MESES_ABREV = { jan: "janeiro", fev: "fevereiro", mar: "março", abr: "abril", mai: "maio", jun: "junho",
+    jul: "julho", ago: "agosto", set: "setembro", out: "outubro", nov: "novembro", dez: "dezembro" };
+  const mesFalado = (rot) => {
+    const [m, a] = rot.split("/");
+    return (MESES_ABREV[m] || m) + (a ? " de " + (a.length === 2 ? "20" + a : a) : "");
+  };
+  const minuscula = (t) => t.charAt(0).toLowerCase() + t.slice(1);
+
+  function referencia(p) {
+    const d = new Date();
+    if (p === "day") return "Hoje, " + d.toLocaleDateString("pt-BR");
+    const mes = CS.mesExtenso(d);
+    return mes[0].toUpperCase() + mes.slice(1) + " de " + d.getFullYear() + " (até agora)";
+  }
+
+  function fraseSaldo(b, falado) {
+    const v = falado ? falaKwh(b.saldo_kwh) : kwh(Math.abs(b.saldo_kwh));
+    if (b.saldo_kwh > 0) return `Sobraram ${v}: você gerou mais do que consumiu.`;
+    if (b.saldo_kwh < 0) return `Faltaram ${v}, que vieram da rede elétrica.`;
+    return "Geração e consumo empataram.";
+  }
+
+  // =====================================================================
+  //  TELA: MINHA CONTA
+  // =====================================================================
+  async function renderConta() {
+    let info, b;
+    try { [info, b] = await Promise.all([dados.info(), dados.bill(estado.periodo)]); }
+    catch (_) { return; }
+    aplicarInfo(info);
+    $("id-referencia").textContent = referencia(estado.periodo);
+
+    // Status energético: ícone + texto + cor (nunca só cor)
+    const st = $("status-energia");
+    const [cls, ico, txt] = semDados(b) ? ["neutro", "i-alerta", "Sem leituras no período"]
+      : b.saldo_kwh > 0 ? ["pos", "i-ok", "Excedente: gerou mais do que consumiu"]
+      : b.saldo_kwh < 0 ? ["neg", "i-alerta", "Déficit: consumiu mais do que gerou"]
+      : ["neutro", "i-ok", "Equilíbrio entre geração e consumo"];
+    st.className = "status-energia " + cls;
+    st.querySelector("use").setAttribute("href", "#" + ico);
+    st.querySelector("span").textContent = txt;
+
+    // Indicadores principais (sem leituras: "—", nunca zero)
+    const vazio = semDados(b);
+    $("v-geracao").textContent = vazio ? "—" : CS.nfKwh(b.geracao_kwh);
+    $("v-consumo").textContent = vazio ? "—" : CS.nfKwh(b.consumo_kwh);
+    const maior = Math.max(b.geracao_kwh, b.consumo_kwh, 0.001);
+    $("m-geracao").style.width = (b.geracao_kwh / maior) * 100 + "%";
+    $("m-consumo").style.width = (b.consumo_kwh / maior) * 100 + "%";
+    const vs = $("v-saldo");
+    vs.textContent = vazio ? "—" : (b.saldo_kwh > 0 ? "+" : "") + kwh(b.saldo_kwh);
+    vs.className = "kpi-valor " + (b.saldo_kwh >= 0 ? "pos-txt" : "neg-txt");
+    $("card-saldo").classList.toggle("negativo", b.saldo_kwh < 0);
+    $("v-saldo-txt").textContent = semDados(b) ? "sem leituras" : b.saldo_kwh > 0 ? "▲ sobrou energia"
+      : b.saldo_kwh < 0 ? "▼ faltou energia (veio da rede)" : "empate";
+    const parcial = avisoParcial(b);
+    $("aviso-parcial").hidden = !parcial;
+    $("aviso-parcial").textContent = parcial;
+
+    // De onde veio a energia da casa
+    $("atend-frase").textContent = vazio ? "Sem leituras no período."
+      : b.atendimento_pct === null ? "Ainda não houve consumo no período."
+      : `O sol atendeu ${b.atendimento_pct}% do consumo da casa ${per(estado.periodo).quando}.`;
+    $("comp-consumo").replaceChildren(vazio ? "" : Graficos.composicao([
+      { rotulo: "Direto do sol", valor: b.autoconsumo_kwh, classe: "gen" },
+      { rotulo: "Da rede elétrica", valor: b.importada_kwh, classe: "neg" },
+    ], { titulo: "Do que a casa consumiu:" }));
+    $("nota-fluxo").textContent = vazio ? "" : notaFluxo(b);
+
+    // Valor estimado
+    $("v-custo").textContent = vazio ? "—" : money(b.custo_liquido, b.moeda);
+    $("v-economia").textContent = vazio ? "—" : money(b.economia_solar, b.moeda);
+    $("valor-explica").textContent =
+      `A pagar = (energia importada − energia injetada) × tarifa de ${money(b.tarifa, b.moeda)}/kWh, ` +
+      "considerando que a energia injetada na rede compensa a energia comprada. " +
+      "Economia = energia gerada × tarifa. Não inclui impostos, taxa mínima (custo de disponibilidade), " +
+      "bandeiras tarifárias nem a cobrança do Fio B. O valor oficial vem na conta da concessionária.";
+  }
+
+  // Identificação e modo (o aviso de demonstração vale para todas as telas)
+  function aplicarInfo(info) {
+    estado.info = info;
+    $("id-unidade").textContent = info.unidade;
+    $("id-proxima").textContent = info.proxima_leitura ? CS.dataBR(info.proxima_leitura) : "Não informada";
+    $("aviso-simulado").hidden = !info.simulado;
+    $("fonte-dados").textContent = CS.USE_MOCK ? "modo demonstração (simulado no navegador)"
+      : info.simulado ? "modo demonstração (dados simulados)" : "dados do medidor";
+  }
+
+  // Origem dos fluxos (injetada/importada/usada direto): medida ou calculada
+  function origemFluxo(b, falado) {
+    if (b.fluxo_origem === "medido") return falado ? "medidos pelo medidor da rede" : "Medidos pelo ESP32 no ponto de conexão com a rede.";
+    if (b.fluxo_origem === "misto") return falado ? "em parte medidos e em parte calculados" : "Parte medidos pelo ESP32, parte calculados a partir da geração e do consumo.";
+    return falado ? "calculados a partir da geração e do consumo"
+      : "Calculados a partir das medições de geração e consumo (não é a medição da concessionária).";
+  }
+  const notaFluxo = (b) => "Energia injetada, importada e usada direto: " + origemFluxo(b, false).charAt(0).toLowerCase() + origemFluxo(b, false).slice(1);
+
+  function avisoParcial(b) {
+    if (semDados(b) || (!b.n_sem_consumo && !b.n_sem_geracao)) return "";
+    const partes = [];
+    if (b.n_sem_consumo) partes.push(`${b.n_sem_consumo} ${b.n_sem_consumo === 1 ? "leitura" : "leituras"} sem consumo medido`);
+    if (b.n_sem_geracao) partes.push(`${b.n_sem_geracao} ${b.n_sem_geracao === 1 ? "leitura" : "leituras"} sem geração medida`);
+    return `Atenção: ${partes.join(" e ")} neste período (sensor indisponível ou contador reiniciado). Os totais podem estar incompletos.`;
+  }
+
+  const w = (v) => (v === null || v === undefined ? "—" : nf(v, 0));
+
+  async function renderAoVivo() {
+    let c;
+    try { c = await dados.current(); } catch (_) { return; }
+    const l = c.leitura;
+    const hist = $("vivo-historico"), at = $("v-atualizado"), rede = $("v-rede");
+    if (!l) {
+      for (const id of ["v-consumo-w", "v-geracao-w", "v-saldo-w"]) $(id).textContent = "—";
+      $("v-saldo-w-rotulo").textContent = "Saldo";
+      at.textContent = "Nenhuma transmissão recebida do medidor ainda.";
+      at.classList.remove("aviso");
+      hist.hidden = true; rede.hidden = true;
+      $("id-leitura").textContent = "Nenhuma leitura ainda";
+      return;
+    }
+    if (c.atual) {
+      $("v-consumo-w").textContent = w(l.consumo_w);
+      $("v-geracao-w").textContent = w(l.geracao_w);
+      const s = $("v-saldo-w");
+      s.textContent = l.saldo_w === null ? "—" : (l.saldo_w > 0 ? "+" : "") + nf(l.saldo_w, 0);
+      s.className = "valor " + (l.saldo_w === null ? "" : l.saldo_w >= 0 ? "pos-txt" : "neg-txt");
+      $("v-saldo-w-rotulo").textContent = l.saldo_w === null ? "Saldo" : l.saldo_w >= 0 ? "▲ Sobrando" : "▼ Faltando";
+      at.textContent = "Medição das " + new Date(l.ts).toLocaleTimeString("pt-BR") +
+        (l.consumo_w === null || l.geracao_w === null ? " — um dos sensores não enviou valor." : "");
+      at.classList.remove("aviso");
+      hist.hidden = true;
+      rede.hidden = !l.rede_medida;
+      if (l.rede_medida) rede.textContent = `Rede (medido): importando ${w(l.rede_importando_w)} W · exportando ${w(l.rede_exportando_w)} W`;
+    } else {
+      // Sem comunicação: a última leitura vira HISTÓRICA — não é mostrada como atual.
+      for (const id of ["v-consumo-w", "v-geracao-w", "v-saldo-w"]) { $(id).textContent = "—"; $(id).className = $(id).className.replace(/ ?(pos|neg)-txt/, ""); }
+      $("v-saldo-w-rotulo").textContent = "Saldo";
+      rede.hidden = true;
+      at.textContent = "Sem medição atual: o medidor não transmite há " + tempoDesde(c.idade_s) + ".";
+      at.classList.add("aviso");
+      hist.hidden = false;
+      hist.textContent = `Última leitura válida (histórica), de ${CS.dataHoraBR(l.ts)}: geração ${w(l.geracao_w)} W, consumo ${w(l.consumo_w)} W.`;
+    }
+    $("id-leitura").textContent = CS.dataHoraBR(l.ts) + (c.atual ? "" : " (histórica)");
+  }
+
+  function tempoDesde(seg) {
+    if (seg === null || seg === undefined) return "—";
+    if (seg < 90) return `${seg} segundos`;
+    const min = Math.round(seg / 60);
+    if (min < 90) return `${min} ${min === 1 ? "minuto" : "minutos"}`;
+    const hrs = Math.round(min / 60);
+    return hrs < 48 ? `${hrs} ${hrs === 1 ? "hora" : "horas"}` : `${Math.round(hrs / 24)} dias`;
+  }
+
+  // Indicador de comunicação com o medidor (ESP32). Atualiza a cada 5 s e,
+  // quando chega uma transmissão nova, recarrega os cards e gráficos.
+  let ultimaTransmissao, ultimoEstado = null, ultimoRecarregar = 0, recargaPendente = false;  // undefined = ainda não verificado
+  async function monitorarConexao() {
+    let st;
+    try { st = await dados.status(); } catch (_) { return; }
+    const caixa = $("conexao"), eTxt = $("conexao-estado"), dTxt = $("conexao-detalhe");
+    const disp = st.dispositivos[0];
+    const quando = st.ultima_transmissao ? CS.dataHoraBR(st.ultima_transmissao) : "";
+    const nome = disp ? (disp.fonte === "simulador" ? "Simulador" : `Medidor ${disp.fonte}`) : "Medidor";
+    const textos = {
+      conectado: [`${nome} conectado.`, `Última transmissão: ${quando}.`, "ok"],
+      sem_comunicacao_recente: ["Sem comunicação recente com o medidor.", `Última transmissão há ${tempoDesde(st.idade_s)} (${quando}). Os valores ao vivo ficam indisponíveis.`, "atraso"],
+      desconectado: ["Medidor desconectado.", `Última transmissão: ${quando}. Mostrando apenas o histórico registrado.`, "off"],
+      aguardando_primeira_transmissao: ["Aguardando a primeira transmissão do medidor.",
+        st.modo === "real" && !st.recebimento_habilitado ? "O recebimento está desligado no servidor (falta configurar a API_KEY)." : "Assim que o ESP32 enviar leituras, os valores aparecem aqui.", "aguardando"],
+    };
+    const [e, d, cls] = textos[st.estado] || textos.aguardando_primeira_transmissao;
+    eTxt.textContent = e;
+    dTxt.textContent = d;
+    caixa.className = "conexao " + cls;
+    $("id-origem").textContent = !disp ? "Nenhum medidor transmitiu ainda"
+      : disp.fonte === "simulador" ? "Simulador (modo demonstração)" : `Medidor ${disp.fonte}, via Wi-Fi`;
+
+    if (ultimoEstado && ultimoEstado !== st.estado) anunciar(e);   // só avisa quando muda
+    ultimoEstado = st.estado;
+    estado.conexao = st;
+
+    // Transmissão nova: atualiza cards e gráficos sem recarregar a página
+    // (no máximo a cada 10 s; uma mudança nesse meio-tempo fica pendente).
+    if (st.ultima_transmissao !== ultimaTransmissao) {
+      if (ultimaTransmissao !== undefined) recargaPendente = true;
+      ultimaTransmissao = st.ultima_transmissao;
+    }
+    if (recargaPendente && Date.now() - ultimoRecarregar > 10000) {
+      recargaPendente = false;
+      ultimoRecarregar = Date.now();
+      for (const k of ["bill:day", "bill:month", "hist:day", "hist:month", "months", "insights", "current"]) cache.delete(k);
+      if (estado.tela !== "assistente") RENDER[estado.tela]();
+    }
+  }
+
+  // Texto falado sobre o momento atual, respeitando o estado da comunicação.
+  function resumoAoVivo(c) {
+    if (!c || !c.leitura) return "O medidor ainda não enviou nenhuma leitura.";
+    const l = c.leitura;
+    if (!c.atual) {
+      return `Não há medição atual: o medidor não transmite há ${tempoDesde(c.idade_s)}. ` +
+        `A última leitura válida, de ${CS.dataHoraBR(l.ts)}, indicava ` +
+        `geração de ${l.geracao_w === null ? "valor desconhecido" : falaWatts(l.geracao_w)} ` +
+        `e consumo de ${l.consumo_w === null ? "valor desconhecido" : falaWatts(l.consumo_w)}.`;
+    }
+    let t = l.consumo_w === null ? "Neste momento o consumo não está sendo medido"
+      : `Neste momento a casa está consumindo ${falaWatts(l.consumo_w)}`;
+    t += l.geracao_w === null ? ", e a geração não está sendo medida."
+      : l.geracao_w >= 1 ? `, e as placas estão gerando ${falaWatts(l.geracao_w)}.` : ", e as placas não estão gerando.";
+    if (l.rede_medida) {
+      if (l.rede_exportando_w > 0) t += ` O medidor da rede indica que você está exportando ${falaWatts(l.rede_exportando_w)}.`;
+      else if (l.rede_importando_w > 0) t += ` O medidor da rede indica que você está importando ${falaWatts(l.rede_importando_w)}.`;
+    } else if (l.saldo_w !== null) {
+      if (l.saldo_w > 0) t += ` Pela diferença, sobram cerca de ${falaWatts(l.saldo_w)}, que vão para a rede.`;
+      else if (l.saldo_w < 0) t += ` Pela diferença, faltam cerca de ${falaWatts(l.saldo_w)}, que vêm da rede.`;
+    }
+    return t;
+  }
+
+  // =====================================================================
+  //  TELA: HISTÓRICO
+  // =====================================================================
+  // Todas as horas do dia ou todos os dias do mês, com ou sem dados.
+  function montarSlots(h, periodo) {
+    const porRotulo = new Map(h.map((x) => [x.rotulo, x]));
+    const agora = new Date();
+    const slots = [];
+    if (periodo === "day") {
+      for (let i = 0; i < 24; i++) {
+        const rotulo = String(i).padStart(2, "0") + "h";
+        slots.push({ rotulo, eixo: rotulo, futuro: i > agora.getHours(), dado: porRotulo.get(rotulo) });
+      }
+    } else {
+      const dias = new Date(agora.getFullYear(), agora.getMonth() + 1, 0).getDate();
+      const mes = String(agora.getMonth() + 1).padStart(2, "0");
+      for (let d = 1; d <= dias; d++) {
+        const rotulo = String(d).padStart(2, "0") + "/" + mes;
+        slots.push({ rotulo, eixo: String(d), futuro: d > agora.getDate(), dado: porRotulo.get(rotulo) });
+      }
+    }
+    for (const s of slots) {
+      s.cima = s.dado?.geracao_kwh || 0;
+      s.baixo = s.dado?.consumo_kwh || 0;
+    }
+    return slots;
+  }
+  const indiceAtual = (p) => (p === "day" ? new Date().getHours() : new Date().getDate() - 1);
+  const marcarEixo = (p) => (i, n, banda) => (p === "day"
+    ? i % (banda * 3 >= 30 ? 3 : 6) === 0
+    : i === 0 || (i + 1) % (banda * 2 >= 22 ? 2 : 5) === 0);
+
+  function textoSlot(p) {
+    return (s) => {
+      const quando = p === "day" ? "Às " + s.rotulo : "Dia " + s.rotulo;
+      if (s.futuro) return `${quando}: ainda não chegou.`;
+      if (!s.dado) return `${quando}: sem leituras.`;
+      const saldo = s.cima - s.baixo;
+      return `${quando}: ☀ gerou ${nf(s.cima)} kWh · 🏠 consumiu ${nf(s.baixo)} kWh · ` +
+        (saldo >= 0 ? `▲ sobrou ${nf(saldo)} kWh` : `▼ faltou ${nf(-saldo)} kWh`);
+    };
+  }
+
+  function picoDe(lista, k) {
+    return lista.reduce((p, x) => (x[k] > (p ? p[k] : 0) ? x : p), null);
+  }
+  const temSelecao = (id) => ($(id)._estado?.sel ?? -1) >= 0;
+
+  async function renderHistorico() {
+    const p = estado.periodo;
+    let h;
+    try { h = await dados.history(p); } catch (_) { return; }
+    const slots = montarSlots(h, p);
+    const vazioMsg = p === "day" ? "Ainda não há leituras hoje." : "Ainda não há leituras neste mês.";
+
+    $("hist-sub").textContent = p === "day" ? "Hora a hora, hoje." : "Dia a dia, neste mês.";
+    const totG = h.reduce((a, x) => a + x.geracao_kwh, 0);
+    const totC = h.reduce((a, x) => a + x.consumo_kwh, 0);
+    const pG = picoDe(h, "geracao_kwh"), pC = picoDe(h, "consumo_kwh");
+    const em = (x) => (p === "day" ? "às " : "no dia ") + x.rotulo;
+    $("tot-gen").textContent = kwh(totG);
+    $("tot-use").textContent = kwh(totC);
+    $("tot-gen-pico").textContent = pG ? `Maior geração ${em(pG)} (${kwh(pG.geracao_kwh)})` : "Ainda sem geração";
+    $("tot-use-pico").textContent = pC ? `Maior consumo ${em(pC)} (${kwh(pC.consumo_kwh)})` : "Ainda sem consumo";
+
+    Graficos.barras($("graf-periodo"), {
+      chave: "periodo:" + p, slots, atual: indiceAtual(p), marcarEixo: marcarEixo(p),
+      leitura: $("leitura-periodo"), textoSlot: textoSlot(p), vazio: vazioMsg,
+    });
+    if (!temSelecao("graf-periodo")) {
+      $("leitura-periodo").textContent = h.length
+        ? "Toque numa barra (ou use as setas do teclado) para ver os valores de cada " + (p === "day" ? "hora." : "dia.") : "";
+    }
+    $("graf-periodo").setAttribute("aria-label",
+      `Gráfico ${p === "day" ? "hora a hora" : "dia a dia"}: o sol gerou ${kwh(totG)} e a casa consumiu ${kwh(totC)}.` +
+      (pG ? ` Maior geração ${em(pG)}.` : "") + (pC ? ` Maior consumo ${em(pC)}.` : "") +
+      " Use as setas para percorrer as barras. Tabela equivalente logo abaixo.");
+
+    preencherTabela($("tabela-periodo"), h.map((x) => [x.rotulo, nf(x.geracao_kwh), nf(x.consumo_kwh),
+      (x.geracao_kwh - x.consumo_kwh > 0 ? "+" : "") + nf(x.geracao_kwh - x.consumo_kwh)]));
+
+    // Evolução do saldo: soma acumulada; horas/dias futuros sem valor
+    let acc = 0;
+    const slotsSaldo = slots.map((s) => {
+      if (s.futuro || !h.length) return { ...s, valor: null };
+      acc += s.cima - s.baixo;
+      return { ...s, valor: acc };
+    });
+    Graficos.linha($("graf-saldo"), {
+      chave: "saldo:" + p, slots: slotsSaldo, atual: indiceAtual(p), marcarEixo: marcarEixo(p),
+      leitura: $("leitura-saldo"), vazio: vazioMsg,
+      textoSlot: (s) => {
+        const quando = p === "day" ? "Até as " + s.rotulo : "Até o dia " + s.rotulo;
+        if (s.valor === null) return `${quando}: ainda não chegou.`;
+        return `${quando}: saldo acumulado de ${(s.valor > 0 ? "+" : "") + nf(s.valor)} kWh ` +
+          (s.valor >= 0 ? "(▲ sobrando)" : "(▼ faltando, veio da rede)");
+      },
+    });
+    if (!temSelecao("graf-saldo")) {
+      $("leitura-saldo").textContent = h.length ? "Toque no gráfico para ver o saldo acumulado em cada ponto." : "";
+    }
+    $("graf-saldo").setAttribute("aria-label",
+      `Evolução do saldo: termina em ${(acc > 0 ? "+" : "") + nf(acc)} kWh ` +
+      (acc >= 0 ? "(sobrou energia)." : "(faltou energia, que veio da rede).") + " Use as setas para percorrer.");
+
+    renderMeses();
+  }
+
+  async function renderMeses() {
+    let ms;
+    try { ms = await dados.months(); } catch (_) { return; }
+    const slots = ms.map((m) => ({ rotulo: m.rotulo, eixo: m.rotulo.split("/")[0], cima: m.geracao_kwh, baixo: m.consumo_kwh, dado: m }));
+    Graficos.barras($("graf-meses"), {
+      chave: "meses", slots, altura: 240, larguraMax: 34, leitura: $("leitura-meses"),
+      vazio: "Ainda não há meses com leituras.", atual: slots.length - 1,
+      textoSlot: (s) => {
+        const m = s.dado, saldo = m.geracao_kwh - m.consumo_kwh;
+        return `${m.rotulo}: ☀ gerou ${kwh(m.geracao_kwh)} · 🏠 consumiu ${kwh(m.consumo_kwh)} · ` +
+          (saldo >= 0 ? `▲ sobrou ${kwh(saldo)}` : `▼ faltou ${kwh(-saldo)}`) +
+          ` · ${m.dias_com_dados} ${m.dias_com_dados === 1 ? "dia" : "dias"} com leitura`;
+      },
+    });
+    if (!temSelecao("graf-meses")) $("leitura-meses").textContent = ms.length ? "Toque num mês para ver os valores." : "";
+    const incompletos = ms.filter((m) => m.dias_com_dados < 28).map((m) => m.rotulo);
+    $("meses-sub").textContent = "Geração e consumo de cada mês com leituras." +
+      (incompletos.length ? ` Meses com poucos dias de leitura (${incompletos.join(", ")}) aparecem menores por estarem incompletos.` : "");
+    $("graf-meses").setAttribute("aria-label", "Histórico mensal: " +
+      ms.map((m) => `${m.rotulo}, gerou ${kwh(m.geracao_kwh)} e consumiu ${kwh(m.consumo_kwh)}`).join("; ") + ".");
+    preencherTabela($("tabela-meses"), ms.map((m) => [m.rotulo, nf(m.geracao_kwh), nf(m.consumo_kwh),
+      nf(m.injetada_kwh), nf(m.importada_kwh), String(m.dias_com_dados)]));
+  }
+
+  function preencherTabela(tabela, linhas) {
+    const tb = tabela.querySelector("tbody");
+    tb.textContent = "";
+    if (!linhas.length) {
+      const td = tb.insertRow().insertCell();
+      td.colSpan = tabela.querySelectorAll("thead th").length;
+      td.textContent = "Sem leituras no período.";
+      return;
+    }
+    for (const [primeira, ...resto] of linhas) {
+      const tr = tb.insertRow();
+      tr.appendChild(h("th", { scope: "row", texto: primeira }));
+      for (const v of resto) tr.insertCell().textContent = v;
+    }
+  }
+
+  // =====================================================================
+  //  TELA: DETALHAMENTO
+  // =====================================================================
+  function icone(id) {
+    const NS = "http://www.w3.org/2000/svg";
+    const svg = document.createElementNS(NS, "svg");
+    svg.setAttribute("class", "icone");
+    svg.setAttribute("viewBox", "0 0 24 24");
+    svg.setAttribute("aria-hidden", "true");
+    svg.setAttribute("focusable", "false");
+    const use = document.createElementNS(NS, "use");
+    use.setAttribute("href", "#" + id);
+    svg.appendChild(use);
+    return svg;
+  }
+
+  async function renderDetalhe() {
+    let b;
+    try { b = await dados.bill(estado.periodo); } catch (_) { return; }
+    if (semDados(b)) {
+      $("fluxo-sub").textContent = "Sem leituras no período.";
+    } else {
+      $("fluxo-sub").textContent = "Para onde foi a energia " + per(estado.periodo).ate + ". " + origemFluxo(b, false);
+    }
+
+    const no = (ico, txt, cls) => h("span", { classe: "no " + cls }, [icone(ico), h("span", { texto: txt })]);
+    const fluxo = (de, para, valor, rotulo, cls) => h("li", { classe: "fluxo " + cls }, [
+      de, h("span", { classe: "seta", "aria-hidden": "true" }), para,
+      h("p", { classe: "fluxo-texto" }, [h("strong", { texto: kwh(valor) }), " " + rotulo]),
+    ]);
+    $("fluxos").replaceChildren(
+      fluxo(no("i-sol", "Placas", "gen"), no("i-casa", "Casa", "use"), b.autoconsumo_kwh, "usados direto pela casa", "f-auto"),
+      fluxo(no("i-sol", "Placas", "gen"), no("i-rede", "Rede", "rede"), b.injetada_kwh, "injetados na rede (sobra)", "f-inj"),
+      fluxo(no("i-rede", "Rede", "rede"), no("i-casa", "Casa", "use"), b.importada_kwh, "importados da concessionária", "f-imp"),
+    );
+
+    const origem = (tipo, txt) => h("span", { classe: "origem " + tipo, texto: txt });
+    const origemRede = () => b.fluxo_origem === "medido" ? origem("medido", "Medido — medidor da rede")
+      : b.fluxo_origem === "misto" ? origem("calculado", "Parte medido, parte calculado") : origem("calculado", "Calculado");
+    const linhas = [
+      ["Energia gerada pelo sistema fotovoltaico", kwh(b.geracao_kwh), origem("medido", "Medido — sensor de geração")],
+      ["Energia consumida pela residência", kwh(b.consumo_kwh), origem("medido", "Medido — sensor de consumo")],
+      ["Consumida diretamente da geração solar", kwh(b.autoconsumo_kwh), origemRede()],
+      ["Injetada na rede elétrica", kwh(b.injetada_kwh), origemRede()],
+      ["Importada da concessionária", kwh(b.importada_kwh), origemRede()],
+      ["Créditos energéticos acumulados", "—", origem("indisponivel", "Não disponível — registrado pela concessionária")],
+      ["Saldo (gerada − consumida)", (b.saldo_kwh > 0 ? "+" : "") + kwh(b.saldo_kwh), origem("calculado", "Calculado")],
+    ];
+    const tb = $("demonstrativo").querySelector("tbody");
+    tb.textContent = "";
+    linhas.forEach(([item, valor, orig], i) => {
+      const tr = tb.insertRow();
+      if (i === linhas.length - 1) tr.className = "total-linha";
+      tr.appendChild(h("th", { scope: "row" }, [h("span", { classe: "item-nome", texto: item }), orig]));
+      const td = tr.insertCell(); td.className = "num"; td.textContent = valor;
+    });
+
+    $("comp-geracao").replaceChildren(Graficos.composicao([
+      { rotulo: "Usada direto pela casa", valor: b.autoconsumo_kwh, classe: "gen" },
+      { rotulo: "Injetada na rede", valor: b.injetada_kwh, classe: "pos" },
+    ], { titulo: "Do que o sol gerou:" }));
+    $("comp-consumo-det").replaceChildren(Graficos.composicao([
+      { rotulo: "Direto do sol", valor: b.autoconsumo_kwh, classe: "gen" },
+      { rotulo: "Da rede elétrica", valor: b.importada_kwh, classe: "neg" },
+    ], { titulo: "Do que a casa consumiu:" }));
+
+    $("como-obtido-texto").replaceChildren(
+      h("p", { texto: "Energia gerada e energia consumida são medidas por dois sensores: um nas placas solares e outro no quadro de energia da casa." }),
+      h("p", { texto: "A cada leitura, o aplicativo compara os dois: se o sol gera mais do que a casa usa, a sobra é contada como injetada na rede; se gera menos, a falta é contada como importada da concessionária. A parte que a casa usou ao mesmo tempo em que o sol gerou é a energia consumida diretamente." }),
+      h("p", { texto: "Esses valores calculados podem diferir um pouco da conta oficial: não incluem as perdas do inversor e não vêm do medidor da concessionária. Os créditos de energia só a concessionária registra, por isso aparecem como não disponíveis." }),
+      h("p", { texto: `Relação consumo ÷ geração (indicador usado nas versões anteriores): ${b.geracao_kwh > 0 ? b.eficiencia_pct + "%" : "sem geração no período"}. Acima de 100% significa que a casa consumiu mais do que gerou.` }),
+    );
+  }
+
+  // =====================================================================
+  //  LEITURA DA CONTA EM VOZ ALTA (por seções)
+  // =====================================================================
+  async function ouvirConta() {
+    if (estado.tela !== "conta") mostrarTela("conta", { foco: false });
+    let info, b;
+    try { [info, b] = await Promise.all([dados.info(), dados.bill(estado.periodo)]); }
+    catch (_) { return falarOuAnunciar("Não consegui carregar os dados da conta. Verifique a conexão e tente de novo."); }
+    await renderConta();
+    const p = estado.periodo;
+    const secoes = [];
+    const sec = (el, titulo, frases) => secoes.push({ el: $(el), titulo, frases: frases.filter(Boolean) });
+
+    const ref = p === "day" ? "a hoje" : `ao mês de ${CS.mesExtenso()}`;
+    sec("card-ident", "Identificação", [
+      `Olá! Vamos conferir o resumo energético da sua residência referente ${ref}, até agora.`,
+      info.simulado ? "Atenção: o aplicativo está em modo demonstração; estes dados são simulados." : "",
+      semDados(b) ? "Ainda não há leituras neste período." : "",
+      estado.conexao && ["sem_comunicacao_recente", "desconectado"].includes(estado.conexao.estado)
+        ? `Atenção: o medidor não transmite há ${tempoDesde(estado.conexao.idade_s)}; os valores vão até a última leitura recebida.` : "",
+      avisoParcial(b) ? "Alguns intervalos ficaram sem medição, então os totais podem estar incompletos." : "",
+    ]);
+    if (!semDados(b)) {
+      sec("card-gerada", "Energia gerada", [`Seu sistema solar gerou ${falaKwh(b.geracao_kwh)}.`]);
+      sec("card-consumida", "Energia consumida", [`Sua residência consumiu ${falaKwh(b.consumo_kwh)}.`]);
+      sec("card-saldo", "Saldo", [fraseSaldo(b, true)]);
+      sec("card-atendimento", "De onde veio a energia", [
+        `Do total gerado, ${falaKwh(b.autoconsumo_kwh)} foram usados diretamente pela casa, e ${falaKwh(b.injetada_kwh)} foram injetados na rede elétrica.`,
+        `Da concessionária, vieram ${falaKwh(b.importada_kwh)}.`,
+        b.atendimento_pct !== null ? `Ou seja, o sol atendeu ${b.atendimento_pct} por cento do consumo da casa.` : "",
+        `Esses valores são ${origemFluxo(b, true)}.`,
+      ]);
+      sec("card-valor", "Valor estimado", [
+        b.custo_liquido > 0
+          ? `O valor estimado da energia a pagar é de ${falaReais(b.custo_liquido)}, com a tarifa de ${tarifaFalada(b)}.`
+          : "Pela estimativa, não há valor de energia a pagar, porque a energia injetada compensou a comprada.",
+        `A economia com o sol foi de ${falaReais(b.economia_solar)}.`,
+        "Impostos e taxas da concessionária não estão incluídos.",
+      ]);
+    }
+    sec("btn-ouvir-conta", "Encerramento", ["Para mais detalhes, use as abas Histórico e Detalhes, ou faça perguntas no Assistente."]);
+
+    const itens = [];
+    secoes.forEach((s, g) => s.frases.forEach((texto) => itens.push({ texto, el: s.el, grupo: g, titulo: s.titulo, rolar: true })));
+    if (!Voz.tocar(itens)) anunciar(itens.map((i) => i.texto).join(" "));
+  }
+
+  function falarOuAnunciar(texto) {
+    if (!Voz.falar(texto)) anunciar(texto);
+  }
+
+  // Barra de controles da leitura
+  function setupBarraFala() {
+    Voz.aoMudar((est, item) => {
+      $("barra-fala").hidden = est === "parado";
+      const pausado = est === "pausado";
+      $("barra-fala-titulo").textContent = (pausado ? "Pausado" : "Lendo") + (item?.titulo ? ": " + item.titulo : " em voz alta…");
+      $("btn-pausa").setAttribute("aria-label", pausado ? "Continuar" : "Pausar");
+      $("ico-pausa").setAttribute("d", pausado ? "M7 5l12 7-12 7Z" : "M7 5h3v14H7zM14 5h3v14h-3z");
+      $("btn-repetir").disabled = !Voz.temRepeticao;
+    });
+    $("btn-pausa").addEventListener("click", () => Voz.alternarPausa());
+    $("btn-proximo").addEventListener("click", () => Voz.proximo());
+    $("btn-anterior").addEventListener("click", () => Voz.anterior());
+    $("btn-parar").addEventListener("click", () => Voz.parar());
+    document.addEventListener("keydown", (e) => {
+      if (e.key === "Escape" && Voz.estado !== "parado") Voz.parar();
+    });
+  }
+
+  // =====================================================================
+  //  ASSISTENTE: perguntas prontas respondidas com os dados reais
+  // =====================================================================
+  // Cada intenção devolve { texto, visual?, nota? }. "texto" é exibido e
+  // falado; "visual" é um gráfico/indicador; "nota" explica a origem.
+  const SEM_LEITURAS = { texto: "Ainda não há leituras neste período. Assim que os sensores enviarem dados, eu respondo com os números da sua casa." };
+  const NOTA_ESTIM = "Estimativa com a tarifa configurada; não inclui impostos, taxa mínima nem Fio B.";
+  const comp = (a, b) => Graficos.comparativo([a, b]);
+  const diasComLeitura = (h) => h.filter((x) => x.consumo_kwh > 0 || x.geracao_kwh > 0).length;
+
+  const INTENCOES = {
+    // ---- Geração ----
+    async g_mes() {
+      const [b, hm] = await Promise.all([dados.bill("month"), dados.history("month")]);
+      if (semDados(b)) return SEM_LEITURAS;
+      const dias = diasComLeitura(hm) || 1;
+      return {
+        texto: `Neste mês, até agora, seu sistema solar gerou ${falaKwh(b.geracao_kwh)}, ` +
+          `uma média de ${falaKwh(b.geracao_kwh / dias)} por dia, em ${dias} ${dias === 1 ? "dia" : "dias"} com leitura. ` +
+          `Isso equivale a uma economia estimada de ${falaReais(b.economia_solar)}.`,
+        visual: comp({ rotulo: "Gerado", valor: b.geracao_kwh, classe: "gen" }, { rotulo: "Consumido", valor: b.consumo_kwh, classe: "use" }),
+        nota: NOTA_ESTIM,
+      };
+    },
+    async g_hoje() {
+      const b = await dados.bill("day");
+      if (semDados(b)) return SEM_LEITURAS;
+      return {
+        texto: `Hoje, até agora, seu sistema solar gerou ${falaKwh(b.geracao_kwh)}, e a casa consumiu ${falaKwh(b.consumo_kwh)}.`,
+        visual: comp({ rotulo: "Gerado", valor: b.geracao_kwh, classe: "gen" }, { rotulo: "Consumido", valor: b.consumo_kwh, classe: "use" }),
+      };
+    },
+    async g_esperado() {
+      const ins = (await dados.insights()).geracao_hoje;
+      const hoje = ins.hoje_kwh, media = ins.media_7d_mesmo_horario_kwh;
+      if (!ins.dias_base || media === null) {
+        return { texto: "Ainda não há dias anteriores com leituras para comparar. Depois de alguns dias de uso, consigo dizer se a geração está dentro do normal para a sua casa." };
+      }
+      if (media < 0.01 && hoje < 0.01) {
+        return { texto: "Ainda não houve sol hoje, então não dá para comparar. Pergunte de novo durante o dia." };
+      }
+      const r = media > 0 ? hoje / media : 2;
+      const pct = Math.round(Math.abs(r - 1) * 100);
+      const veredito = r >= 0.9 && r <= 1.1 ? "Está dentro do esperado."
+        : r > 1.1 ? `Está ${pct} por cento acima da média. Ótimo dia de sol!`
+        : r >= 0.7 ? `Está um pouco abaixo da média, ${pct} por cento a menos. Pode ser um dia com nuvens.`
+        : `Está bem abaixo da média, ${pct} por cento a menos. Pode ser um dia nublado; se acontecer vários dias seguidos com sol, vale verificar sujeira ou sombra nas placas.`;
+      return {
+        texto: `Hoje, até agora, o sistema gerou ${falaKwh(hoje)}. Nos últimos ${ins.dias_base} dias, até este mesmo horário, a média foi de ${falaKwh(media)}. ${veredito}`,
+        visual: comp({ rotulo: "Hoje", valor: hoje, classe: "gen" }, { rotulo: `Média de ${ins.dias_base} dias`, valor: media, classe: "neutro" }),
+        nota: "Comparação com o histórico da própria casa até o mesmo horário; não há uma meta de geração cadastrada.",
+      };
+    },
+    async g_pico() {
+      const hm = await dados.history("month");
+      const pico = picoDe(hm, "geracao_kwh");
+      if (!pico) return { texto: "Ainda não houve geração solar neste mês." };
+      const dias = diasComLeitura(hm) || 1;
+      const total = hm.reduce((a, x) => a + x.geracao_kwh, 0);
+      const slots = montarSlots(hm, "month");
+      return {
+        texto: `O dia de maior geração neste mês foi ${pico.rotulo}, com ${falaKwh(pico.geracao_kwh)}. A média por dia foi de ${falaKwh(total / dias)}.`,
+        visual: miniGrafico(slots, slots.findIndex((s) => s.rotulo === pico.rotulo), "month"),
+      };
+    },
+    async g_aproveito() {
+      const b = await dados.bill("month");
+      if (semDados(b)) return SEM_LEITURAS;
+      if (!b.geracao_kwh) return { texto: "Ainda não houve geração solar neste mês." };
+      return {
+        texto: `Do que o sol gerou neste mês, ${b.aproveitamento_pct} por cento foi usado direto pela casa, ${falaKwh(b.autoconsumo_kwh)}. ` +
+          `O restante, ${falaKwh(b.injetada_kwh)}, foi injetado na rede. ` +
+          "A energia injetada não é perdida: ela vira crédito com a concessionária e abate a energia que você compra. " +
+          "Para usar mais o sol diretamente, ligue aparelhos de maior consumo entre 10 e 15 horas.",
+        visual: Graficos.composicao([
+          { rotulo: "Usada direto pela casa", valor: b.autoconsumo_kwh, classe: "gen" },
+          { rotulo: "Injetada na rede", valor: b.injetada_kwh, classe: "pos" },
+        ], { titulo: "Do que o sol gerou:" }),
+        nota: notaFluxo(b),
+      };
+    },
+
+    // ---- Consumo ----
+    async c_mes() {
+      const [b, d] = await Promise.all([dados.bill("month"), dados.bill("day")]);
+      if (semDados(b)) return SEM_LEITURAS;
+      return {
+        texto: `Neste mês, até agora, sua residência consumiu ${falaKwh(b.consumo_kwh)}. ` +
+          `Desse total, ${falaKwh(b.autoconsumo_kwh)} vieram direto do sol e ${falaKwh(b.importada_kwh)} da rede elétrica.` +
+          (semDados(d) ? "" : ` Só hoje, foram ${falaKwh(d.consumo_kwh)}.`),
+        visual: Graficos.composicao([
+          { rotulo: "Direto do sol", valor: b.autoconsumo_kwh, classe: "gen" },
+          { rotulo: "Da rede elétrica", valor: b.importada_kwh, classe: "neg" },
+        ], { titulo: "Do que a casa consumiu:" }),
+        nota: notaFluxo(b),
+      };
+    },
+    async c_hoje() {
+      const b = await dados.bill("day");
+      if (semDados(b)) return SEM_LEITURAS;
+      return {
+        texto: `Hoje, até agora, sua residência consumiu ${falaKwh(b.consumo_kwh)}, que custariam ${falaReais(b.custo_consumo)} sem a energia solar.`,
+        visual: comp({ rotulo: "Consumido", valor: b.consumo_kwh, classe: "use" }, { rotulo: "Gerado", valor: b.geracao_kwh, classe: "gen" }),
+      };
+    },
+    async c_pico() {
+      const hd = await dados.history("day");
+      const pico = picoDe(hd, "consumo_kwh");
+      if (!pico) return { texto: "Ainda não há leituras de consumo hoje." };
+      const slots = montarSlots(hd, "day");
+      return {
+        texto: `Hoje, o horário de maior consumo foi às ${pico.rotulo}, com ${falaKwh(pico.consumo_kwh)}. ` +
+          (pico.geracao_kwh > 0 ? `Nesse horário, o sol gerou ${falaKwh(pico.geracao_kwh)}.` : "Nesse horário não havia sol, então a energia veio da rede."),
+        visual: miniGrafico(slots, slots.findIndex((s) => s.rotulo === pico.rotulo), "day"),
+      };
+    },
+    async c_vs_mes() {
+      const [b, ins] = await Promise.all([dados.bill("month"), dados.insights()]);
+      const ant = ins.mes_anterior, mp = ant.mesmo_periodo;
+      if (semDados(b)) return SEM_LEITURAS;
+      if (!ant.dados_completos || !mp.n_leituras) {
+        return { texto: `Não há leituras suficientes de ${mesFalado(ant.rotulo)} para comparar. A comparação fica disponível quando houver um mês anterior completo.` };
+      }
+      const dia = new Date().getDate();
+      const varPct = mp.consumo_kwh > 0 ? ((b.consumo_kwh - mp.consumo_kwh) / mp.consumo_kwh) * 100 : 0;
+      const veredito = Math.abs(varPct) < 5 ? "Seu consumo ficou praticamente igual."
+        : varPct > 0 ? `Seu consumo aumentou ${Math.round(varPct)} por cento.`
+        : `Seu consumo diminuiu ${Math.round(-varPct)} por cento.`;
+      return {
+        texto: `Do dia 1 ao dia ${dia} deste mês, a casa consumiu ${falaKwh(b.consumo_kwh)}. ` +
+          `No mesmo período de ${mesFalado(ant.rotulo)}, consumiu ${falaKwh(mp.consumo_kwh)}. ${veredito}`,
+        visual: comp({ rotulo: "Este mês", valor: b.consumo_kwh, classe: "use" }, { rotulo: ant.rotulo, valor: mp.consumo_kwh, classe: "neutro" }),
+        nota: "Compara os mesmos dias dos dois meses, para ser justo com o mês em andamento.",
+      };
+    },
+    async c_maior() {
+      const [b, d] = await Promise.all([dados.bill("month"), dados.bill("day")]);
+      if (semDados(b)) return SEM_LEITURAS;
+      const frase = (x) => x.saldo_kwh > 0 ? `gerou mais do que consumiu, sobrando ${falaKwh(x.saldo_kwh)}`
+        : x.saldo_kwh < 0 ? `consumiu mais do que gerou, faltando ${falaKwh(x.saldo_kwh)}` : "geração e consumo empataram";
+      return {
+        texto: (b.saldo_kwh < 0 ? "Sim. " : "Não. ") +
+          `Neste mês, até agora, você gerou ${falaKwh(b.geracao_kwh)} e consumiu ${falaKwh(b.consumo_kwh)}: ${frase(b)}.` +
+          (semDados(d) ? "" : ` Hoje, você ${frase(d)}.`),
+        visual: comp({ rotulo: "Gerado", valor: b.geracao_kwh, classe: "gen" }, { rotulo: "Consumido", valor: b.consumo_kwh, classe: "use" }),
+      };
+    },
+
+    // ---- Economia ----
+    async e_economia() {
+      const b = await dados.bill("month");
+      if (semDados(b)) return SEM_LEITURAS;
+      return {
+        texto: `Neste mês, até agora, a energia solar gerou ${falaKwh(b.geracao_kwh)}, o que equivale a cerca de ${falaReais(b.economia_solar)} ` +
+          `que você deixa de pagar, com a tarifa de ${tarifaFalada(b)}. ` +
+          `Sem o sol, a energia consumida custaria ${falaReais(b.custo_consumo)}; com o sol, a estimativa é de ${falaReais(b.custo_liquido)}.`,
+        visual: Graficos.comparativo([
+          { rotulo: "Sem o sol", valor: b.custo_consumo, classe: "neg", texto: money(b.custo_consumo, b.moeda) },
+          { rotulo: "Com o sol", valor: b.custo_liquido, classe: "pos", texto: money(b.custo_liquido, b.moeda) },
+        ]),
+        nota: NOTA_ESTIM,
+      };
+    },
+    async e_comprando() {
+      const b = await dados.bill("month");
+      if (semDados(b)) return SEM_LEITURAS;
+      return {
+        texto: `Neste mês, até agora, a casa precisou de ${falaKwh(b.importada_kwh)} da rede elétrica, nos momentos em que o sol não era suficiente, como à noite. ` +
+          `No mesmo período, você injetou ${falaKwh(b.injetada_kwh)} na rede. ` +
+          (b.custo_liquido > 0
+            ? `Como a energia injetada compensa a comprada, a estimativa a pagar pela energia é de ${falaReais(b.custo_liquido)}.`
+            : "Como você injetou mais do que comprou, pela estimativa não há energia a pagar."),
+        visual: comp({ rotulo: "Comprada (importada)", valor: b.importada_kwh, classe: "neg" }, { rotulo: "Injetada na rede", valor: b.injetada_kwh, classe: "pos" }),
+        nota: notaFluxo(b),
+      };
+    },
+    async e_creditos() {
+      const b = await dados.bill("month");
+      if (semDados(b)) return SEM_LEITURAS;
+      const dif = b.injetada_kwh - b.importada_kwh;
+      return {
+        texto: "O saldo oficial de créditos só aparece na conta da concessionária; este aplicativo não tem acesso a ele. " +
+          `Pelos sensores, neste mês você injetou ${falaKwh(b.injetada_kwh)} na rede e comprou ${falaKwh(b.importada_kwh)}. ` +
+          (dif > 0
+            ? `Como injetou mais do que comprou, a tendência é sobrar cerca de ${falaKwh(dif)} em créditos, que podem abater contas futuras.`
+            : `Como comprou mais do que injetou, a tendência é não sobrar créditos neste mês: a diferença, ${falaKwh(dif)}, deve ser cobrada.`),
+        visual: comp({ rotulo: "Injetada (gera crédito)", valor: b.injetada_kwh, classe: "pos" }, { rotulo: "Comprada (usa crédito)", valor: b.importada_kwh, classe: "neg" }),
+        nota: notaFluxo(b),
+      };
+    },
+    async e_reduzir() {
+      const hd = await dados.history("day");
+      const comLeitura = hd.filter((x) => x.consumo_kwh > 0);
+      if (!comLeitura.length) {
+        return { texto: "Ainda não há leituras de consumo hoje. Uma dica geral: use aparelhos de maior consumo entre 10 e 15 horas, quando as placas geram mais, e evite deixar aparelhos em modo de espera." };
+      }
+      const total = comLeitura.reduce((a, x) => a + x.consumo_kwh, 0);
+      const semSol = comLeitura.filter((x) => x.geracao_kwh <= 0).reduce((a, x) => a + x.consumo_kwh, 0);
+      const pico = picoDe(hd, "consumo_kwh");
+      const slots = montarSlots(hd, "day");
+      return {
+        texto: `Hoje, o maior consumo foi às ${pico.rotulo}, com ${falaKwh(pico.consumo_kwh)}. ` +
+          `${Math.round((semSol / total) * 100)} por cento do consumo de hoje aconteceu sem sol, com energia comprada da rede. ` +
+          "Três dicas: use máquina de lavar, ferro de passar e bomba d'água entre 10 e 15 horas, quando as placas geram mais. " +
+          "Banhos mais curtos, ou o chuveiro na posição verão, reduzem bastante o consumo. " +
+          "E desligue da tomada aparelhos que ficam em modo de espera.",
+        visual: miniGrafico(slots, slots.findIndex((s) => s.rotulo === pico.rotulo), "day"),
+      };
+    },
+
+    // ---- Conta ----
+    async x_explica() {
+      const b = await dados.bill("month");
+      if (semDados(b)) return SEM_LEITURAS;
+      return {
+        texto: "Sua conta tem três números principais. " +
+          `Energia gerada: ${falaKwh(b.geracao_kwh)}, o que as placas produziram. ` +
+          `Energia consumida: ${falaKwh(b.consumo_kwh)}, o que a casa usou. ` +
+          `Saldo: ${minuscula(fraseSaldo(b, true))} ` +
+          "Quando o sol gera mais do que a casa usa, a sobra vai para a rede e vira crédito. Quando falta, a casa usa energia da rede. " +
+          (b.custo_liquido > 0 ? `A estimativa a pagar pela energia, neste mês, é de ${falaReais(b.custo_liquido)}.`
+            : "Pela estimativa, neste mês não há energia a pagar."),
+        visual: comp({ rotulo: "Gerado", valor: b.geracao_kwh, classe: "gen" }, { rotulo: "Consumido", valor: b.consumo_kwh, classe: "use" }),
+        nota: NOTA_ESTIM,
+      };
+    },
+    async x_injetada() {
+      const b = await dados.bill("month");
+      return {
+        texto: "Energia injetada é a sobra da geração solar que a casa não usou na hora e que vai para a rede elétrica da concessionária. " +
+          "Ela não é perdida: vira crédito, que abate a energia que você compra depois, por exemplo à noite. " +
+          (semDados(b) ? "" : `Neste mês, pelos sensores, foram injetados ${falaKwh(b.injetada_kwh)}.`),
+        visual: semDados(b) ? null : Graficos.composicao([
+          { rotulo: "Usada direto pela casa", valor: b.autoconsumo_kwh, classe: "gen" },
+          { rotulo: "Injetada na rede", valor: b.injetada_kwh, classe: "pos" },
+        ], { titulo: "Do que o sol gerou:" }),
+        nota: semDados(b) ? null : notaFluxo(b),
+      };
+    },
+    async x_compensada() {
+      const b = await dados.bill("month");
+      const base = "Energia gerada é tudo o que as placas produziram. " +
+        "Energia compensada é só a parte injetada na rede que é usada para abater a energia comprada da concessionária. " +
+        "A energia que a casa usa no mesmo momento em que é gerada nem passa pelo medidor da concessionária, por isso não aparece como compensação. ";
+      if (semDados(b)) return { texto: base };
+      const compensavel = Math.min(b.injetada_kwh, b.importada_kwh);
+      return {
+        texto: base + `Neste mês, você gerou ${falaKwh(b.geracao_kwh)}, injetou ${falaKwh(b.injetada_kwh)} e comprou ${falaKwh(b.importada_kwh)}. ` +
+          `Pela estimativa, até ${falaKwh(compensavel)} podem ser compensados. O valor oficial aparece na conta da concessionária.`,
+        visual: Graficos.comparativo([
+          { rotulo: "Gerada", valor: b.geracao_kwh, classe: "gen" },
+          { rotulo: "Injetada", valor: b.injetada_kwh, classe: "pos" },
+          { rotulo: "Compensável (estim.)", valor: compensavel, classe: "neutro" },
+        ]),
+        nota: notaFluxo(b),
+      };
+    },
+    async x_saldo() {
+      const b = await dados.bill("month");
+      const base = "O saldo energético é a energia gerada menos a consumida. Saldo positivo, com seta para cima e em verde, quer dizer que sobrou energia. " +
+        "Saldo negativo, com seta para baixo e em vermelho, quer dizer que faltou, e a diferença veio da rede elétrica. ";
+      if (semDados(b)) return { texto: base };
+      return {
+        texto: base + `Neste mês, até agora, ${minuscula(fraseSaldo(b, true))}`,
+        visual: comp({ rotulo: "Gerado", valor: b.geracao_kwh, classe: "gen" }, { rotulo: "Consumido", valor: b.consumo_kwh, classe: "use" }),
+      };
+    },
+
+    // ---- Atalhos e perguntas faladas/digitadas ----
+    async pagar() {
+      const b = await dados.bill("month");
+      if (semDados(b)) return SEM_LEITURAS;
+      return {
+        texto: (b.custo_liquido > 0
+          ? `Pela estimativa, neste mês, até agora, a energia a pagar é de ${falaReais(b.custo_liquido)}. `
+          : "Pela estimativa, neste mês, até agora, não há energia a pagar. ") +
+          `Você comprou ${falaKwh(b.importada_kwh)} da rede e injetou ${falaKwh(b.injetada_kwh)}, que compensam a compra. ` +
+          "A conta oficial pode ter ainda a taxa mínima e impostos.",
+        visual: comp({ rotulo: "Comprada (importada)", valor: b.importada_kwh, classe: "neg" }, { rotulo: "Injetada na rede", valor: b.injetada_kwh, classe: "pos" }),
+        nota: NOTA_ESTIM,
+      };
+    },
+    async agora() {
+      return { texto: resumoAoVivo(await atualOuNulo()) };
+    },
+
+    // ---- Agora (medição atual do ESP32; nunca mostra leitura antiga como atual) ----
+    async agora_gerando() {
+      const c = await atualOuNulo();
+      const l = c?.leitura;
+      if (!c || !c.atual || !l || l.geracao_w === null) return { texto: semMedicaoAtual(c, "da geração") };
+      return {
+        texto: l.geracao_w >= 1 ? `Neste momento as placas estão gerando ${falaWatts(l.geracao_w)}.`
+          : "Neste momento as placas não estão gerando energia.",
+        visual: comp({ rotulo: "Gerando", valor: l.geracao_w, classe: "gen", texto: nf(l.geracao_w, 0) + " W" },
+          { rotulo: "Consumindo", valor: l.consumo_w || 0, classe: "use", texto: w(l.consumo_w) + " W" }),
+        nota: `Medição das ${new Date(l.ts).toLocaleTimeString("pt-BR")}.`,
+      };
+    },
+    async agora_consumindo() {
+      const c = await atualOuNulo();
+      const l = c?.leitura;
+      if (!c || !c.atual || !l || l.consumo_w === null) return { texto: semMedicaoAtual(c, "do consumo") };
+      return {
+        texto: `Neste momento sua residência está consumindo ${falaWatts(l.consumo_w)}.`,
+        visual: comp({ rotulo: "Consumindo", valor: l.consumo_w, classe: "use", texto: nf(l.consumo_w, 0) + " W" },
+          { rotulo: "Gerando", valor: l.geracao_w || 0, classe: "gen", texto: w(l.geracao_w) + " W" }),
+        nota: `Medição das ${new Date(l.ts).toLocaleTimeString("pt-BR")}.`,
+      };
+    },
+    async agora_rede() {
+      const c = await atualOuNulo();
+      const l = c?.leitura;
+      if (!c || !c.atual || !l) return { texto: semMedicaoAtual(c, "da troca de energia com a rede") };
+      if (l.rede_medida) {
+        const imp = l.rede_importando_w || 0, exp = l.rede_exportando_w || 0;
+        return {
+          texto: exp > 0 ? `Você está exportando ${falaWatts(exp)} para a rede, segundo o medidor da rede.`
+            : imp > 0 ? `Você está importando ${falaWatts(imp)} da rede, segundo o medidor da rede.`
+            : "Neste momento não há troca de energia com a rede.",
+          visual: comp({ rotulo: "Importando", valor: imp, classe: "neg", texto: nf(imp, 0) + " W" },
+            { rotulo: "Exportando", valor: exp, classe: "pos", texto: nf(exp, 0) + " W" }),
+          nota: "Medido pelo ESP32 no ponto de conexão com a rede.",
+        };
+      }
+      if (l.saldo_w === null) return { texto: "O medidor não mede a rede diretamente, e um dos sensores não enviou valor agora; não dá para estimar." };
+      return {
+        texto: "O medidor não mede a rede diretamente. " + (l.saldo_w > 0
+          ? `Pela diferença entre geração e consumo, você está exportando cerca de ${falaWatts(l.saldo_w)}.`
+          : l.saldo_w < 0 ? `Pela diferença entre geração e consumo, você está importando cerca de ${falaWatts(l.saldo_w)}.`
+          : "Geração e consumo estão praticamente iguais."),
+        nota: "Estimativa: diferença entre geração e consumo (não é a medição da concessionária).",
+      };
+    },
+    async e_exportando() {
+      const b = await dados.bill("month");
+      if (semDados(b)) return SEM_LEITURAS;
+      return {
+        texto: `Neste mês, até agora, você exportou ${falaKwh(b.injetada_kwh)} para a rede, valores ${origemFluxo(b, true)}. ` +
+          `Isso corresponde a ${b.aproveitamento_pct === null ? "parte" : (100 - b.aproveitamento_pct) + " por cento"} do que o sol gerou.`,
+        visual: Graficos.composicao([
+          { rotulo: "Usada direto pela casa", valor: b.autoconsumo_kwh, classe: "gen" },
+          { rotulo: "Exportada (injetada)", valor: b.injetada_kwh, classe: "pos" },
+        ], { titulo: "Do que o sol gerou:" }),
+        nota: notaFluxo(b),
+      };
+    },
+  };
+
+  async function atualOuNulo() {
+    try { return await dados.current(); } catch (_) { return null; }
+  }
+  // de: "da geração", "do consumo"...
+  function semMedicaoAtual(c, de) {
+    if (!c) return "Não consegui falar com o servidor agora. Tente de novo em instantes.";
+    if (!c.leitura) return "O medidor ainda não enviou nenhuma leitura, então não há medição atual.";
+    if (c.atual) return `A última transmissão do medidor não trouxe a medição ${de}.`;
+    return `Não há medição atual ${de}: o medidor não transmite há ${tempoDesde(c.idade_s)}. ` +
+      `A última leitura válida é de ${CS.dataHoraBR(c.leitura.ts)} e está disponível no histórico.`;
+  }
+
+  // Texto da pergunta exibido na conversa
+  function textoPergunta(chave) {
+    const b = document.querySelector(`#tela-assistente .pergunta[data-intencao="${chave}"]`) ||
+      document.querySelector(`.pergunta[data-intencao="${chave}"]`);
+    return b ? b.textContent.trim() : chave;
+  }
+
+  // Mini gráfico para respostas (sem interação, com um ponto destacado)
+  function miniGrafico(slots, sel, p) {
+    const div = h("div", { classe: "grafico mini", role: "img",
+      "aria-label": `Gráfico ${p === "day" ? "hora a hora de hoje" : "dia a dia deste mês"}, com destaque em ${slots[sel]?.rotulo || ""}.` });
+    Graficos.barras(div, { slots, sel, atual: -1, marcarEixo: marcarEixo(p), altura: 190, interativo: false });
+    return div;
+  }
+
+  // ---------- conversa ----------
+  async function perguntar(chave, rotulo) {
+    if (estado.tela !== "assistente") mostrarTela("assistente", { foco: false });
+    const msg = adicionarMensagem(rotulo || textoPergunta(chave));
+    let r;
+    try { r = await INTENCOES[chave](); }
+    catch (e) { console.error(e); r = { texto: "Não consegui buscar os dados agora. Verifique a conexão e tente de novo." }; }
+    preencherResposta(msg, r);
+  }
+
+  function rolarAte(el) {
+    const suave = !matchMedia("(prefers-reduced-motion: reduce)").matches;
+    el.scrollIntoView({ block: "nearest", behavior: suave ? "smooth" : "auto" });
+  }
+
+  function adicionarMensagem(pergunta) {
+    $("conversa-vazia")?.remove();
+    const art = h("article", { classe: "msg" }, [
+      h("p", { classe: "msg-pergunta" }, [h("span", { classe: "sr-only", texto: "Você perguntou: " }), pergunta]),
+      h("div", { classe: "msg-resposta" }, h("p", { classe: "msg-texto", texto: "Buscando os dados…" })),
+    ]);
+    $("conversa").appendChild(art);
+    rolarAte(art);
+    return art;
+  }
+
+  function preencherResposta(art, r, { guardar = true } = {}) {
+    const corpo = art.querySelector(".msg-resposta");
+    const p = h("p", { classe: "msg-texto" });
+    corpo.replaceChildren(p);
+    Voz.renderFrases(p, Voz.dividir(r.texto));
+    if (r.visual) corpo.appendChild(h("div", { classe: "msg-visual" }, r.visual));
+    if (r.nota) corpo.appendChild(h("p", { classe: "sub msg-nota", texto: r.nota }));
+    const ouvir = h("button", { classe: "botao secundario pequeno", type: "button" }, [icone("i-som"), "Ouvir"]);
+    const parar = h("button", { classe: "botao secundario pequeno", type: "button", texto: "Parar" });
+    ouvir.addEventListener("click", () => falarMsg(r.texto, p, true));
+    parar.addEventListener("click", () => Voz.parar());
+    corpo.appendChild(h("div", { classe: "linha-botoes" }, [ouvir, parar]));
+
+    if (prefs.falar && Voz.suportada) falarMsg(r.texto, p, guardar);
+    else anunciar(r.texto);
+    rolarAte(art);
+  }
+
+  function falarMsg(texto, p, guardar) {
+    const spans = [...p.querySelectorAll(".frase")];
+    const frases = Voz.dividir(texto);
+    if (!Voz.tocar(frases.map((t, i) => ({ texto: t, el: spans[i], grupo: i })), { guardar })) anunciar(texto);
+  }
+
+  // ---------- perguntas digitadas ou faladas ----------
+  const AJUDA = "Você pode perguntar, por exemplo: quanto gerei este mês, quanto consumi hoje, quanto vou pagar, " +
+    "estou acumulando créditos, como reduzir o consumo, ou peça para eu explicar a conta. " +
+    "Também entendo: repetir, mais devagar e mais rápido.";
+
+  function identificar(texto) {
+    const q = CS.semAcento(texto).replace(/[?!.,]/g, " ").replace(/\s+/g, " ").trim();
+    const t = (re) => re.test(q);
+    const hoje = t(/\bhoje\b/);
+    const agora = t(/\bagora\b|neste momento|nesse momento|ao vivo|instant|estou (gerando|consumindo|importando|exportando)|esta (gerando|consumindo)/) && !hoje && !t(/\bmes\b/);
+    if (agora && t(/import|export|rede/)) return "agora_rede";
+    if (agora && t(/ger|produz/)) return "agora_gerando";
+    if (agora && t(/consum|gast|usando/)) return "agora_consumindo";
+    if (agora) return "agora";
+    if (t(/export/)) return "e_exportando";
+    if (t(/credito/)) return "e_creditos";
+    if (t(/compens/)) return "x_compensada";
+    if (t(/injet/)) return "x_injetada";
+    if (t(/esperad|normal|abaixo|acima/)) return "g_esperado";
+    if (t(/reduz|diminuir|dica|gastar menos/)) return "e_reduzir";
+    if (t(/econom/)) return "e_economia";
+    if (t(/compr|import|concession/)) return "e_comprando";
+    if (t(/explic|resumo|entender/)) return "x_explica";
+    if (t(/pagar|pago|custo|custa|valor|preco|reais|dinheiro|\bconta\b/)) return "pagar";
+    if (t(/mais do que (ger|produz)|mais que (ger|produz)/)) return "c_maior";
+    if (t(/aument|mes passado|anterior/)) return "c_vs_mes";
+    if (t(/(horario|hora).*(consum|gast)|(consum|gast).*(horario|hora)|pico de consumo/)) return "c_pico";
+    if (t(/\bdia\b.*(ger|produz)|maior geracao|(ger|produz).*\bdia\b/)) return "g_pico";
+    if (t(/aproveit/)) return "g_aproveito";
+    if (t(/saldo|sobr|falt/)) return "x_saldo";
+    if (t(/consum|gast|usei|usou/)) return hoje ? "c_hoje" : "c_mes";
+    if (t(/ger|produz|solar|\bsol\b|placa|painel/)) return hoje ? "g_hoje" : "g_mes";
+    return null;
+  }
+
+  function perguntaLivre(texto) {
+    const q = CS.semAcento(texto);
+    const curto = q.trim().split(/\s+/).length <= 3;
+    const responderCom = (txt, guardar = true) => preencherResposta(adicionarMensagem(texto), { texto: txt }, { guardar });
+    if (curto && /\b(parar|pare|para|silencio|chega|cancelar)\b/.test(q)) { Voz.parar(); return; }
+    if (/repet|de novo|outra vez/.test(q)) { if (!Voz.repetir()) responderCom("Ainda não há resposta para repetir.", false); return; }
+    if (/devagar|lent/.test(q)) { ajustarVelocidade(-1); return responderCom("Certo, vou falar mais devagar.", false); }
+    if (/rapid|depressa/.test(q)) { ajustarVelocidade(+1); return responderCom("Certo, vou falar mais rápido.", false); }
+    if (/ajuda|o que (eu )?posso|comandos/.test(q)) return responderCom(AJUDA);
+    const chave = identificar(texto);
+    if (!chave) return responderCom("Não entendi a pergunta. " + AJUDA);
+    perguntar(chave, texto);
+  }
+
+  const VELOCIDADES = [0.7, 0.9, 1.15];
+  function ajustarVelocidade(delta) {
+    let i = VELOCIDADES.findIndex((v) => v >= prefs.rate - 0.01);
+    if (i < 0) i = 1;
+    prefs.rate = VELOCIDADES[Math.max(0, Math.min(VELOCIDADES.length - 1, i + delta))];
+    salvarPrefs();
+    sincronizarAjustes();
+  }
+
+  // ---------- microfone (reconhecimento de voz) ----------
+  function setupReconhecimento() {
+    const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+    const btn = $("btn-perguntar"), txt = $("btn-perguntar-txt"), aviso = $("voz-aviso");
+    const avisar = (m) => { aviso.hidden = !m; aviso.textContent = m || ""; };
+    if (!SR) { $("por-voz").hidden = true; return; } // iPhone/Safari: os botões bastam
+    const rec = new SR();
+    rec.lang = "pt-BR"; rec.interimResults = true; rec.maxAlternatives = 3; rec.continuous = false;
+    let ouvindo = false, respondeu = false;
+    const setOuvindo = (on) => {
+      ouvindo = on;
+      document.body.classList.toggle("gravando", on);
+      btn.setAttribute("aria-pressed", String(on));
+      txt.textContent = on ? "Ouvindo… toque para cancelar" : "Perguntar falando";
+    };
+    btn.addEventListener("click", () => {
+      if (ouvindo) { rec.abort(); return; }
+      Voz.parar();   // o microfone não pode ouvir o próprio app falando
+      respondeu = false;
+      avisar("Pode falar após o bipe…");
+      try { rec.start(); } catch (_) { /* já iniciado */ }
+    });
+    rec.onstart = () => { setOuvindo(true); bipe(880); };
+    rec.onresult = (ev) => {
+      const res = ev.results[ev.results.length - 1];
+      avisar("Você: " + res[0].transcript);
+      if (!res.isFinal) return;
+      respondeu = true;
+      avisar("");
+      bipe(660, 90);
+      perguntaLivre(res[0].transcript);
+    };
+    rec.onerror = (ev) => {
+      const msgs = {
+        "no-speech": "Não ouvi nada. Toque de novo e fale logo após o bipe.",
+        "audio-capture": "Nenhum microfone encontrado neste aparelho.",
+        "not-allowed": "O microfone está bloqueado. Libere o acesso ao microfone nas configurações do navegador. Em rede local, o navegador exige HTTPS.",
+        "service-not-allowed": "O reconhecimento de voz não está disponível. Use os botões de pergunta.",
+        "network": "O reconhecimento de voz precisa de internet. Use os botões de pergunta.",
+      };
+      if (ev.error === "aborted") { avisar(""); return; }
+      respondeu = true;
+      const m = msgs[ev.error] || "Não consegui ouvir. Tente novamente.";
+      avisar(m);
+      if (prefs.falar && Voz.suportada) Voz.falar(m, null, false); else anunciar(m);
+    };
+    rec.onend = () => { setOuvindo(false); if (!respondeu) avisar(""); };
+  }
+
+  // Bipe curto para indicar "pode falar" sem que o microfone capture uma fala.
+  function bipe(freq = 880, ms = 140) {
+    try {
+      const Ctx = window.AudioContext || window.webkitAudioContext;
+      if (!Ctx) return;
+      bipe.ctx = bipe.ctx || new Ctx();
+      const ctx = bipe.ctx, o = ctx.createOscillator(), g = ctx.createGain();
+      o.frequency.value = freq;
+      g.gain.setValueAtTime(0.0001, ctx.currentTime);
+      g.gain.exponentialRampToValueAtTime(0.25, ctx.currentTime + 0.02);
+      g.gain.exponentialRampToValueAtTime(0.0001, ctx.currentTime + ms / 1000);
+      o.connect(g).connect(ctx.destination);
+      o.start(); o.stop(ctx.currentTime + ms / 1000 + 0.02);
+    } catch (_) {}
+  }
+
+  // ---------- abas de assuntos (padrão ARIA tabs) ----------
+  function setupCategorias() {
+    const abas = [...document.querySelectorAll('.categorias [role="tab"]')];
+    const ativar = (aba, foco) => {
+      abas.forEach((a) => {
+        const sel = a === aba;
+        a.setAttribute("aria-selected", String(sel));
+        a.tabIndex = sel ? 0 : -1;
+        $(a.getAttribute("aria-controls")).hidden = !sel;
+      });
+      if (foco) aba.focus();
+    };
+    abas.forEach((a, i) => {
+      a.addEventListener("click", () => ativar(a));
+      a.addEventListener("keydown", (e) => {
+        const n = { ArrowRight: i + 1, ArrowLeft: i - 1, Home: 0, End: abas.length - 1 }[e.key];
+        if (n === undefined) return;
+        e.preventDefault();
+        ativar(abas[(n + abas.length) % abas.length], true);
+      });
+    });
+  }
+
+  // =====================================================================
+  //  NAVEGAÇÃO ENTRE TELAS
+  // =====================================================================
+  const TELAS = ["conta", "historico", "detalhe", "assistente"];
+  const RENDER = {
+    conta: () => { renderConta(); renderAoVivo(); },
+    historico: renderHistorico, detalhe: renderDetalhe, assistente: () => {},
+  };
+
+  function mostrarTela(nome, { foco = true } = {}) {
+    if (!TELAS.includes(nome)) nome = "conta";
+    estado.tela = nome;
+    for (const t of TELAS) $("tela-" + t).hidden = t !== nome;
+    document.querySelectorAll(".aba").forEach((a) => {
+      if (a.dataset.tela === nome) a.setAttribute("aria-current", "page");
+      else a.removeAttribute("aria-current");
+    });
+    $("periodo-barra").hidden = nome === "assistente";
+    if (location.hash !== "#" + nome) history.replaceState(null, "", "#" + nome);
+    RENDER[nome]();
+    if (foco) $("tela-" + nome).querySelector(".tela-titulo").focus();
+  }
+
+  function trocarPeriodo(p) {
+    if (p === estado.periodo) return;
+    estado.periodo = p;
+    document.querySelectorAll(".botao-periodo").forEach((b) => b.setAttribute("aria-pressed", String(b.dataset.periodo === p)));
+    anunciar("Mostrando " + (p === "day" ? "hoje" : "este mês") + ".");
+    RENDER[estado.tela]();
+  }
+
+  // =====================================================================
+  //  APARÊNCIA E AJUSTES
+  // =====================================================================
+  function aplicarAparencia() {
+    const html = document.documentElement;
+    html.setAttribute("data-tema", prefs.tema);
+    html.setAttribute("data-texto", prefs.texto);
+    $("btn-tema").setAttribute("aria-pressed", String(prefs.tema === "contraste"));
+    $("btn-texto").setAttribute("aria-pressed", String(prefs.texto === "grande"));
+  }
+  function sincronizarAjustes() {
+    document.querySelectorAll('input[name="velocidade"]').forEach((r) => {
+      r.checked = Math.abs(Number(r.value) - prefs.rate) < 0.01;
+    });
+    $("chk-falar").checked = prefs.falar;
+  }
+  function painelVoz(abrir) {
+    $("painel-voz").hidden = !abrir;
+    $("btn-painel-voz").setAttribute("aria-expanded", String(abrir));
+    if (abrir) {
+      Voz.atualizarStatusVoz();
+      $("tit-painel-voz").setAttribute("tabindex", "-1");
+      $("tit-painel-voz").focus();
+    } else $("btn-painel-voz").focus();
+  }
+
+  // ---------- eventos ----------
+  function wire() {
+    window.addEventListener("hashchange", () => mostrarTela(location.hash.slice(1)));
+    document.querySelectorAll(".aba").forEach((a) => a.addEventListener("click", (e) => {
+      e.preventDefault(); mostrarTela(a.dataset.tela);
+    }));
+    document.querySelectorAll('a.link-botao[href="#assistente"]').forEach((a) =>
+      a.addEventListener("click", (e) => { e.preventDefault(); mostrarTela("assistente"); }));
+    document.querySelectorAll(".botao-periodo").forEach((b) => b.addEventListener("click", () => trocarPeriodo(b.dataset.periodo)));
+
+    $("btn-ouvir-conta").addEventListener("click", ouvirConta);
+    $("btn-ler-status").addEventListener("click", async () => falarOuAnunciar(resumoAoVivo(await atualOuNulo())));
+    ["pointerdown", "keydown"].forEach((ev) =>
+      document.addEventListener(ev, Voz.desbloquear, { once: true, capture: true }));
+
+    document.querySelectorAll(".pergunta").forEach((b) =>
+      b.addEventListener("click", () => perguntar(b.dataset.intencao, b.textContent.trim())));
+    $("btn-repetir").addEventListener("click", () => Voz.repetir());
+    $("btn-parar-audio").addEventListener("click", () => Voz.parar());
+    $("btn-limpar").addEventListener("click", () => {
+      Voz.parar();
+      $("conversa").replaceChildren(h("p", { classe: "conversa-vazia", id: "conversa-vazia", texto: "As respostas aparecem aqui." }));
+    });
+    $("form-pergunta").addEventListener("submit", (e) => {
+      e.preventDefault();
+      const campo = $("campo-pergunta");
+      const q = campo.value.trim();
+      if (!q) { campo.focus(); return; }
+      campo.value = "";
+      perguntaLivre(q);
+    });
+
+    $("btn-tema").addEventListener("click", () => {
+      prefs.tema = prefs.tema === "contraste" ? "" : "contraste"; salvarPrefs(); aplicarAparencia();
+    });
+    $("btn-texto").addEventListener("click", () => {
+      prefs.texto = prefs.texto === "grande" ? "" : "grande"; salvarPrefs(); aplicarAparencia();
+    });
+    $("btn-painel-voz").addEventListener("click", () => painelVoz($("painel-voz").hidden));
+    $("btn-fechar-voz").addEventListener("click", () => painelVoz(false));
+    document.querySelectorAll('input[name="velocidade"]').forEach((r) =>
+      r.addEventListener("change", () => { prefs.rate = Number(r.value); salvarPrefs(); }));
+    $("sel-voz").addEventListener("change", (e) => { prefs.voz = e.target.value; salvarPrefs(); Voz.atualizarStatusVoz(); });
+    $("chk-falar").addEventListener("change", (e) => { prefs.falar = e.target.checked; salvarPrefs(); });
+    $("btn-testar-voz").addEventListener("click", () =>
+      falarOuAnunciar("Olá! Esta é a voz que vai ler a sua conta de energia e as respostas do assistente."));
+  }
+
+  // ---------- início ----------
+  function start() {
+    aplicarAparencia();
+    sincronizarAjustes();
+    wire();
+    setupBarraFala();
+    setupCategorias();
+    setupReconhecimento();
+    Voz.carregarServidor();
+    dados.info().then(aplicarInfo).catch(() => {});
+    mostrarTela(location.hash.slice(1) || "conta", { foco: false });
+
+    monitorarConexao();
+    setInterval(monitorarConexao, 5000);
+    setInterval(() => { if (estado.tela === "conta") renderAoVivo(); }, 5000);
+    setInterval(() => {
+      cache.delete("bill:" + estado.periodo);
+      cache.delete("hist:" + estado.periodo);
+      if (estado.tela !== "assistente") RENDER[estado.tela]();
+    }, 30000);
+    if (!CS.USE_MOCK && "serviceWorker" in navigator) {
+      navigator.serviceWorker.register("sw.js").catch(() => {});
+    }
+  }
+  if (document.readyState !== "loading") start();
+  else document.addEventListener("DOMContentLoaded", start);
+})();
+
+</script>
+</body>
+</html>
